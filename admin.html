@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel | MediTech</title>
+  <!-- Reuse your existing stylesheet for consistency -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* ===== ADMIN SPECIFIC STYLES ===== */
+    :root {
+      --admin-bg: #f4f6f8;
+      --admin-card: #ffffff;
+      --admin-border: #e2e8f0;
+      --admin-text: #1e293b;
+      --admin-text-light: #64748b;
+      --admin-success: #10b981;
+      --admin-danger: #ef4444;
+    }
+    body { background: var(--admin-bg); font-family: var(--font-main); margin: 0; }
+    
+    /* Login Screen */
+    .admin-login { position: fixed; inset: 0; background: linear-gradient(135deg, var(--darker), var(--primary-dark)); display: flex; align-items: center; justify-content: center; z-index: 10000; }
+    .login-box { background: var(--admin-card); padding: 45px 35px; border-radius: 16px; box-shadow: 0 25px 60px rgba(0,0,0,0.35); width: 100%; max-width: 420px; text-align: center; animation: slideUp 0.4s ease; }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .login-box h2 { color: var(--primary); margin: 0 0 10px; font-size: 28px; }
+    .login-box p { color: var(--admin-text-light); margin-bottom: 25px; font-size: 15px; }
+    .login-input { width: 100%; padding: 14px 16px; border: 2px solid var(--admin-border); border-radius: 10px; margin-bottom: 20px; font-size: 16px; transition: 0.3s; }
+    .login-input:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 4px rgba(230,57,70,0.1); }
+    .login-btn { width: 100%; padding: 14px; background: var(--gradient-1); color: white; border: none; border-radius: 10px; font-weight: 700; font-size: 16px; cursor: pointer; transition: 0.3s; }
+    .login-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(230,57,70,0.4); }
+    .error-msg { color: var(--admin-danger); font-size: 14px; margin-top: 12px; display: none; font-weight: 600; }
+
+    /* Dashboard */
+    .admin-dashboard { display: none; min-height: 100vh; }
+    .admin-header { background: white; padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 12px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
+    .admin-header h1 { font-size: 24px; color: var(--admin-text); display: flex; align-items: center; gap: 10px; }
+    .admin-logout { background: #f3f4f6; color: var(--admin-text); padding: 10px 18px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; transition: 0.3s; display: flex; align-items: center; gap: 8px; }
+    .admin-logout:hover { background: #fee2e2; color: var(--admin-danger); }
+    
+    .admin-container { padding: 35px; max-width: 1400px; margin: 0 auto; }
+    .admin-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 15px; }
+    .admin-controls p { margin: 0; color: var(--admin-text-light); }
+    .reset-btn { background: transparent; border: 2px solid var(--admin-text-light); color: var(--admin-text-light); padding: 10px 18px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.3s; }
+    .reset-btn:hover { border-color: var(--admin-danger); color: var(--admin-danger); }
+
+    .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 25px; }
+    .product-admin-card { background: var(--admin-card); border-radius: 14px; padding: 22px; box-shadow: 0 4px 12px rgba(0,0,0,0.04); border: 1px solid var(--admin-border); transition: 0.3s; }
+    .product-admin-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.08); border-color: rgba(230,57,70,0.2); }
+    
+    .product-name { font-size: 17px; font-weight: 700; color: var(--admin-text); margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid var(--admin-border); display: flex; justify-content: space-between; align-items: center; }
+    .product-name i { color: var(--primary); opacity: 0.8; }
+    
+    .price-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 18px; }
+    .price-field label { display: block; font-size: 12px; color: var(--admin-text-light); margin-bottom: 6px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+    .price-field input { width: 100%; padding: 12px; border: 1px solid var(--admin-border); border-radius: 8px; font-size: 15px; font-weight: 600; color: var(--admin-text); background: #fafbfc; transition: 0.2s; }
+    .price-field input:focus { outline: none; border-color: var(--primary); background: white; box-shadow: 0 0 0 3px rgba(230,57,70,0.08); }
+    
+    .save-btn { width: 100%; padding: 13px; background: var(--admin-success); color: white; border: none; border-radius: 9px; cursor: pointer; font-weight: 600; font-size: 14px; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .save-btn:hover { background: #059669; transform: translateY(-1px); }
+
+    .toast { position: fixed; bottom: 30px; right: 30px; background: var(--admin-success); color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 8px 25px rgba(16,185,129,0.3); transform: translateY(100px); opacity: 0; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 10001; display: flex; align-items: center; gap: 10px; font-weight: 600; }
+    .toast.show { transform: translateY(0); opacity: 1; }
+
+    @media (max-width: 768px) {
+      .price-row { grid-template-columns: 1fr; }
+      .admin-header { padding: 15px 20px; }
+      .admin-container { padding: 20px; }
+      .product-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOGIN SCREEN -->
+  <div class="admin-login" id="loginScreen">
+    <div class="login-box">
+      <i class="fas fa-user-shield" style="font-size: 48px; color: var(--primary); margin-bottom: 15px;"></i>
+      <h2>Admin Access</h2>
+      <p>Enter your password to manage product pricing</p>
+      <input type="password" class="login-input" id="adminPass" placeholder="Password" autocomplete="current-password">
+      <button class="login-btn" onclick="checkPassword()">Secure Login</button>
+      <div class="error-msg" id="loginError">⚠️ Incorrect password. Please try again.</div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="admin-dashboard" id="dashboard">
+    <header class="admin-header">
+      <h1><i class="fas fa-cogs"></i> MediTech Admin Panel</h1>
+      <button class="admin-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+    </header>
+    
+    <div class="admin-container">
+      <div class="admin-controls">
+        <h2 style="margin:0; color: var(--admin-text);">Product Price Management</h2>
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <p>Changes are saved to local storage automatically.</p>
+          <button class="reset-btn" onclick="resetToDefaults()"><i class="fas fa-undo"></i> Reset Defaults</button>
+        </div>
+      </div>
+      
+      <div class="product-grid" id="productGrid">
+        <!-- Products injected via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div class="toast" id="toast"><i class="fas fa-check-circle"></i> Pricing updated successfully!</div>
+
+  <script>
+    // ===== CONFIGURATION =====
+    const ADMIN_PASSWORD = 'mediadmin';
+    const STORAGE_KEY = 'meditech_products';
+    const AUTH_KEY = 'meditech_admin_auth';
+
+    // Default products matching your current catalog
+    const defaultProducts = [
+      { id: 'p1', name: 'Two Function Hospital Bed', old: 285000, new: 213750, discount: 25 },
+      { id: 'p2', name: 'Single Function Hospital Bed', old: 195000, new: 149990, discount: 23 },
+      { id: 'p3', name: 'Single Function Commode Bed', old: 220000, new: 169990, discount: 23 },
+      { id: 'p4', name: 'Two Function Commode Bed', old: 320000, new: 256000, discount: 20 },
+      { id: 'p5', name: 'Physiotherapy Bed', old: 85000, new: 68000, discount: 20 },
+      { id: 'p6', name: 'Examination Bed', old: 95000, new: 76000, discount: 20 },
+      { id: 'p7', name: 'Basic Wheel Chair', old: 65000, new: 45500, discount: 30 },
+      { id: 'p8', name: 'Blood Collection Chair', old: 145000, new: 116000, discount: 20 },
+      { id: 'p9', name: 'Commode Wheel Chair', old: 125000, new: 99990, discount: 20 },
+      { id: 'p10', name: 'Commode Chair (With Wheels)', old: 45000, new: 35990, discount: 20 },
+      { id: 'p11', name: 'Commode Chair (Without Wheels)', old: 45000, new: 35990, discount: 20 },
+      { id: 'p12', name: 'Medical Air Mattress', old: 35000, new: 29750, discount: 15 },
+      { id: 'p13', name: 'Bed Side Locker', old: 18000, new: 14400, discount: 20 },
+      { id: 'p14', name: 'Bed Side Screen (3-Fold)', old: 42000, new: 33600, discount: 20 },
+      { id: 'p15', name: 'Bed Side Screen (4-Fold)', old: 42000, new: 33600, discount: 20 },
+      { id: 'p16', name: 'Over Bed Table', old: 22000, new: 17600, discount: 20 }
+    ];
+
+    let products = JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultProducts;
+
+    // ===== AUTHENTICATION =====
+    function initAuth() {
+      if(sessionStorage.getItem(AUTH_KEY) === 'true') {
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+        renderProducts();
+      }
+    }
+
+    function checkPassword() {
+      const input = document.getElementById('adminPass');
+      const err = document.getElementById('loginError');
+      
+      if(input.value === ADMIN_PASSWORD) {
+        sessionStorage.setItem(AUTH_KEY, 'true');
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+        renderProducts();
+        input.value = '';
+        err.style.display = 'none';
+      } else {
+        err.style.display = 'block';
+        input.style.borderColor = 'var(--admin-danger)';
+        setTimeout(() => { err.style.display = 'none'; input.style.borderColor = ''; }, 3000);
+      }
+    }
+
+    function logout() {
+      sessionStorage.removeItem(AUTH_KEY);
+      location.reload();
+    }
+
+    document.getElementById('adminPass').addEventListener('keypress', e => {
+      if(e.key === 'Enter') checkPassword();
+    });
+
+    // ===== RENDER & SYNC LOGIC =====
+    function renderProducts() {
+      const grid = document.getElementById('productGrid');
+      grid.innerHTML = '';
+      
+      products.forEach((p, idx) => {
+        grid.innerHTML += `
+          <div class="product-admin-card">
+            <div class="product-name">${p.name} <i class="fas fa-tag"></i></div>
+            <div class="price-row">
+              <div class="price-field">
+                <label>Old Price (Rs.)</label>
+                <input type="number" value="${p.old}" data-idx="${idx}" data-field="old" oninput="syncField(${idx}, 'old', this)">
+              </div>
+              <div class="price-field">
+                <label>New Price (Rs.)</label>
+                <input type="number" value="${p.new}" data-idx="${idx}" data-field="new" oninput="syncField(${idx}, 'new', this)">
+              </div>
+              <div class="price-field">
+                <label>Discount (%)</label>
+                <input type="number" value="${p.discount}" data-idx="${idx}" data-field="discount" oninput="syncField(${idx}, 'discount', this)">
+              </div>
+            </div>
+            <button class="save-btn" onclick="saveProduct(${idx})"><i class="fas fa-save"></i> Update Price</button>
+          </div>
+        `;
+      });
+    }
+
+    function syncField(idx, changedField, inputEl) {
+      let val = parseFloat(inputEl.value) || 0;
+      if(val < 0) val = 0;
+
+      if(changedField === 'old') {
+        products[idx].old = val;
+        if(products[idx].old > 0) {
+          products[idx].discount = Math.max(0, Math.round(((products[idx].old - products[idx].new) / products[idx].old) * 100));
+        }
+      } else if(changedField === 'new') {
+        products[idx].new = val;
+        if(products[idx].old > 0) {
+          products[idx].discount = Math.max(0, Math.round(((products[idx].old - products[idx].new) / products[idx].old) * 100));
+        }
+      } else if(changedField === 'discount') {
+        products[idx].discount = val;
+        if(products[idx].old > 0) {
+          products[idx].new = Math.round(products[idx].old * (1 - val / 100));
+        }
+      }
+
+      // Update sibling inputs without stealing focus
+      const row = inputEl.closest('.price-row');
+      row.querySelectorAll('input').forEach(inp => {
+        if(inp !== inputEl) {
+          inp.value = products[idx][inp.dataset.field];
+        }
+      });
+    }
+
+    function saveProduct(idx) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+      showToast();
+    }
+
+    function resetToDefaults() {
+      if(confirm('Are you sure you want to reset all prices to default values?')) {
+        localStorage.removeItem(STORAGE_KEY);
+        products = JSON.parse(JSON.stringify(defaultProducts));
+        renderProducts();
+        showToast();
+      }
+    }
+
+    function showToast() {
+      const t = document.getElementById('toast');
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    // Initialize on load
+    initAuth();
+  </script>
+</body>
+</html>

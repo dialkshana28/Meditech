@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback - MediTech</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <div class="preloader" id="preloader"><div class="loader"></div></div>
+
+    <header class="header" id="header">
+        <div class="header-top">
+            <div class="container">
+                <div class="header-top-left">
+                    <span><i class="fas fa-phone"></i> 076-942-3681</span>
+                </div>
+            </div>
+        </div>
+        <nav class="navbar">
+            <div class="container">
+                <a href="index.html" class="logo">
+    <img src="https://i.postimg.cc/B63HkgnM/cropped-circle-image-(30).png" alt="MediTech" style="width:45px;height:45px;border-radius:12px;">
+    <div class="logo-text-group">
+        <div class="logo-name">Medi<span>Tech</span></div>
+        <div class="logo-tagline">Medical Furniture</div>
+    </div>
+</a>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="about.html" class="nav-link">About Us</a></li>
+                    <li><a href="products.html" class="nav-link">Products</a></li>
+                    <li><a href="contact.html" class="nav-link">Contact</a></li>
+                    <li><a href="feedback.html" class="nav-link active">Feedback</a></li>
+                    <li><a href="contact.html" class="nav-link nav-btn">Get Quote</a></li>
+                </ul>
+                <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+            </div>
+        </nav>
+    </header>
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+
+    <section class="page-header">
+        <div class="container">
+            <h1>Customer Feedback</h1>
+            <div class="breadcrumb"><a href="index.html">Home</a> <span>/</span> <span>Feedback</span></div>
+        </div>
+    </section>
+
+    <section class="feedback-section">
+        <div class="container">
+            <div class="feedback-grid">
+                <div class="feedback-form animate-on-scroll">
+                    <h2>Share Your Experience</h2>
+                    <p style="color:var(--gray);margin-bottom:25px;">We value your feedback! Please rate your experience with us.</p>
+                    <form id="feedbackForm">
+                        <div class="form-group">
+                            <label>Your Rating</label>
+                            <div class="rating-input" id="ratingInput">
+                                <span class="star" data-rating="1">★</span>
+                                <span class="star" data-rating="2">★</span>
+                                <span class="star" data-rating="3">★</span>
+                                <span class="star" data-rating="4">★</span>
+                                <span class="star" data-rating="5">★</span>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Your Name</label>
+                                <input type="text" placeholder="Your Name" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Phone / Email</label>
+                                <input type="text" placeholder="Contact Info" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Product Purchased</label>
+                            <select>
+                                <option value="">Select Product</option>
+                                <option>Two Function Hospital Bed</option>
+                                <option>Single Function Hospital Bed</option>
+                                <option>Commode Bed</option>
+                                <option>Wheelchair</option>
+                                <option>Physiotherapy Bed</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Your Feedback</label>
+                            <textarea placeholder="Tell us about your experience..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;"><i class="fas fa-paper-plane"></i> Submit Feedback</button>
+                    </form>
+                </div>
+                <div class="reviews-list">
+                    <h2 style="font-size:24px;font-weight:800;margin-bottom:25px;">Recent Reviews</h2>
+                    <div class="review-card animate-on-scroll">
+                        <div class="review-header">
+                            <div class="review-author">
+                                <div class="review-avatar">KD</div>
+                                <div class="review-author-info"><strong>Kamini Dias</strong><span>2 days ago</span></div>
+                            </div>
+                            <div class="review-stars">★★★★★</div>
+                        </div>
+                        <p class="review-text">Excellent product! The electric hospital bed is very sturdy and the remote control is easy to use. My mother is very comfortable. Delivery was fast too!</p>
+                    </div>
+                    <div class="review-card animate-on-scroll delay-1">
+                        <div class="review-header">
+                            <div class="review-author">
+                                <div class="review-avatar">NP</div>
+                                <div class="review-author-info"><strong>Nuwan Perera</strong><span>5 days ago</span></div>
+                            </div>
+                            <div class="review-stars">★★★★☆</div>
+                        </div>
+                        <p class="review-text">Great wheelchair for the price. The build quality is impressive and it folds easily for storage. Customer service was very helpful during the purchase.</p>
+                    </div>
+                    <div class="review-card animate-on-scroll delay-2">
+                        <div class="review-header">
+                            <div class="review-author">
+                                <div class="review-avatar">SF</div>
+                                <div class="review-author-info"><strong>Shanika Fernando</strong><span>1 week ago</span></div>
+                            </div>
+                            <div class="review-stars">★★★★★</div>
+                        </div>
+                        <p class="review-text">We ordered 15 beds for our clinic. MediTech provided excellent bulk pricing and the installation team was professional. Highly recommend for any healthcare facility!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+   <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo">
+                        <img src="https://i.postimg.cc/B63HkgnM/cropped-circle-image-(30).png" alt="MediTech" style="width:45px;height:45px;border-radius:12px;">
+                        Medi<span>Tech</span>
+                    </a>
+                    <p>Leading provider of premium medical beds and chairs in Sri Lanka since 2006.</p>
+                    <div class="footer-socials">
+                        <a href="https://facebook.com/Meditechmedicalfurniture" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="products.html">Products</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="feedback.html">Feedback</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Products</h3>
+                    <ul class="footer-links">
+                        <li><a href="#hospital-beds">Hospital Beds</a></li>
+                        <li><a href="#hospital-chairs">Hospital Chairs</a></li>
+                        <li><a href="#hospital-materials">Hospital Materials</a></li>
+                        <li><a href="#">Wheelchairs</a></li>
+                        <li><a href="#">Accessories</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Contact Info</h3>
+                    <ul class="footer-contact">
+                        <li><span class="icon"><i class="fas fa-map-marker-alt"></i></span> 325, Singhapura, Hokandara</li>
+                        <li><span class="icon"><i class="fas fa-phone"></i></span> 076-942-3681 / 077-623-0425</li>
+                        <li><span class="icon"><i class="fab fa-whatsapp"></i></span> 076-881-5222</li>
+                        <li><span class="icon"><i class="fab fa-facebook"></i></span> @Meditech medical furniture</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 MediTech. All Rights Reserved. | Designed by <a href="https://hexasolutions.online" target="_blank">Hexa Solutions</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="whatsapp-float"><a href="https://wa.me/94768815222" class="whatsapp-btn"><i class="fab fa-whatsapp"></i></a><div class="whatsapp-tooltip">Chat on WhatsApp</div></div>
+    <div class="chatbot-container">
+        <button class="chatbot-toggle" id="chatbotToggle"><i class="fas fa-comments"></i></button>
+        <div class="chatbot-window" id="chatbotWindow">
+            <div class="chatbot-header">
+                <div class="chatbot-header-info"><div class="chatbot-avatar"><i class="fas fa-robot"></i></div><div><h4>MediTech Bot</h4><span>Online</span></div></div>
+                <button class="chatbot-close" id="chatbotClose"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="chatbot-messages" id="chatMessages"><div class="message bot">👋 Hello! Ask about any product.</div></div>
+            <div class="chatbot-input"><input type="text" id="chatInput" placeholder="Type..."><button id="chatSend"><i class="fas fa-paper-plane"></i></button></div>
+        </div>
+    </div>
+    <button class="scroll-top" id="scrollTop"><i class="fas fa-arrow-up"></i></button>
+    <script src="script.js"></script>
+    
+</body>
+</html>

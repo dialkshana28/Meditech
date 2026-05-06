@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediTech - Medical Beds & Chairs Store</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <div class="preloader" id="preloader"><div class="loader"></div></div>
+
+    <header class="header" id="header">
+        <div class="header-top">
+            <div class="container">
+                <div class="header-top-left">
+                    <span><i class="fas fa-phone"></i> 076-942-3681</span>
+                    <span><i class="fas fa-envelope"></i> info@meditech.lk</span>
+                </div>
+            </div>
+        </div>
+        <nav class="navbar">
+            <div class="container">
+                <a href="index.html" class="logo">
+    <img src="https://i.postimg.cc/B63HkgnM/cropped-circle-image-(30).png" alt="MediTech" style="width:45px;height:45px;border-radius:12px;">
+    <div class="logo-text-group">
+        <div class="logo-name">Medi<span>Tech</span></div>
+        <div class="logo-tagline">Medical Furniture</div>
+    </div>
+</a>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="index.html" class="nav-link active">Home</a></li>
+                    <li><a href="about.html" class="nav-link">About Us</a></li>
+                    <li><a href="products.html" class="nav-link">Products</a></li>
+                    <li><a href="contact.html" class="nav-link">Contact</a></li>
+                    <li><a href="feedback.html" class="nav-link">Feedback</a></li>
+                    <li><a href="contact.html" class="nav-link nav-btn">Get Quote</a></li>
+                </ul>
+                <button class="hamburger" id="hamburger" aria-label="Menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </nav>
+    </header>
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge"><span class="pulse-dot"></span>🏥 Trusted Medical Equipment Provider</div>
+                <h1>Premium <span class="highlight">Medical Beds</span> & Chairs for Better Care</h1>
+                <p>Discover our wide range of hospital-grade medical beds, wheelchairs, and patient chairs designed for maximum comfort, safety, and durability.</p>
+                <div class="hero-buttons">
+                    <a href="products.html" class="btn btn-primary"><i class="fas fa-shopping-bag"></i> Shop Now</a>
+                    <a href="about.html" class="btn btn-secondary"><i class="fas fa-play-circle"></i> Learn More</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-item"><div class="stat-number" data-count="5000">5000+</div><div class="stat-label">Products Sold</div></div>
+                    <div class="stat-item"><div class="stat-number" data-count="120">120+</div><div class="stat-label">Happy Clients</div></div>
+                    <div class="stat-item"><div class="stat-number" data-count="15">15+</div><div class="stat-label">Years Experience</div></div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="hero-img-container">
+                    <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=600&h=500&fit=crop" alt="Medical Equipment">
+                </div>
+                <div class="hero-floating-card card-1">
+                    <div class="floating-icon green"><i class="fas fa-check"></i></div>
+                    <div class="floating-text"><strong>ISO Certified</strong><span>Quality Guaranteed</span></div>
+                </div>
+                <div class="hero-floating-card card-2">
+                    <div class="floating-icon blue"><i class="fas fa-truck"></i></div>
+                    <div class="floating-text"><strong>Free Delivery</strong><span>Island Wide</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section features">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">Why Choose Us</div>
+                <h2 class="section-title">Our Key Features</h2>
+                <p class="section-subtitle">We provide the best medical equipment with top-notch services</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card animate-on-scroll">
+                    <div class="feature-icon"><i class="fas fa-award"></i></div>
+                    <h3>Premium Quality</h3>
+                    <p>All our products meet international medical standards and certifications</p>
+                </div>
+                <div class="feature-card animate-on-scroll delay-1">
+                    <div class="feature-icon"><i class="fas fa-shipping-fast"></i></div>
+                    <h3>Fast Delivery</h3>
+                    <p>Free island-wide delivery within 3-5 business days</p>
+                </div>
+                <div class="feature-card animate-on-scroll delay-2">
+                    <div class="feature-icon"><i class="fas fa-headset"></i></div>
+                    <h3>24/7 Support</h3>
+                    <p>Round-the-clock customer service for all your inquiries</p>
+                </div>
+                <div class="feature-card animate-on-scroll delay-3">
+                    <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h3>Warranty</h3>
+                    <p>Up to 5-year warranty on all medical beds and chairs</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section products-section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">Best Sellers</div>
+                <h2 class="section-title">Featured Products</h2>
+                <p class="section-subtitle">Explore our most popular medical beds and chairs</p>
+            </div>
+            <div class="products-grid">
+                <!-- Product 1 -->
+                <div class="product-card animate-on-scroll">
+                    <div class="product-image">
+                        <span class="product-badge badge-sale">-25%</span>
+                        <div class="product-actions">
+                            <button class="product-action-btn"><i class="fas fa-heart"></i></button>
+                            <button class="product-action-btn"><i class="fas fa-eye"></i></button>
+                        </div>
+                        <img src="https://i.postimg.cc/KvXH9Xnf/Two-Function-Hospital-Bed.png" alt="Two Function Hospital Bed">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-category">Hospital Beds</div>
+                        <h3 class="product-name">Two Function Hospital Bed</h3>
+                        <div class="product-rating"><div class="stars">★★★★★</div><span class="rating-count">(48)</span></div>
+                        <div class="product-price">
+                            <span class="price-old">Rs. 285,000</span>
+                            <span class="price-new">Rs. 213,750</span>
+                            <span class="discount-tag">-25%</span>
+                        </div>
+                        <button class="product-btn"><i class="fas fa-cart-plus"></i> Order on WhatsApp</button>
+                    </div>
+                </div>
+                <!-- Product 2 -->
+                <div class="product-card animate-on-scroll delay-1">
+                    <div class="product-image">
+                        <span class="product-badge badge-new">NEW</span>
+                        <img src="https://i.postimg.cc/pTp6SRGw/Single-function-bed.png" alt="Single Function Hospital Bed">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-category">Hospital Beds</div>
+                        <h3 class="product-name">Single Function Hospital Bed</h3>
+                        <div class="product-rating"><div class="stars">★★★★★</div><span class="rating-count">(36)</span></div>
+                        <div class="product-price">
+                            <span class="price-old">Rs. 195,000</span>
+                            <span class="price-new">Rs. 149,990</span>
+                            <span class="discount-tag">-23%</span>
+                        </div>
+                        <button class="product-btn"><i class="fas fa-cart-plus"></i> Order on WhatsApp</button>
+                    </div>
+                </div>
+                <!-- Product 3 -->
+                <div class="product-card animate-on-scroll delay-2">
+                    <div class="product-image">
+                        <span class="product-badge badge-hot">HOT</span>
+                        <img src="https://i.postimg.cc/bJWBcW4S/Single-Function-Hospital-Commode-Bed.png" alt="Commode Bed">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-category">Hospital Beds</div>
+                        <h3 class="product-name">Single Function Commode Bed</h3>
+                        <div class="product-rating"><div class="stars">★★★★☆</div><span class="rating-count">(72)</span></div>
+                        <div class="product-price">
+                            <span class="price-old">Rs. 220,000</span>
+                            <span class="price-new">Rs. 169,990</span>
+                            <span class="discount-tag">-23%</span>
+                        </div>
+                        <button class="product-btn"><i class="fas fa-cart-plus"></i> Order on WhatsApp</button>
+                    </div>
+                </div>
+                <!-- Product 4 -->
+                <div class="product-card animate-on-scroll delay-3">
+                    <div class="product-image">
+                        <span class="product-badge badge-sale">-30%</span>
+                        <img src="https://i.postimg.cc/Z5v0Jd9B/Basic-Wheel-Chair.png" alt="Basic Wheelchair">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-category">Hospital Chairs</div>
+                        <h3 class="product-name">Basic Wheel Chair</h3>
+                        <div class="product-rating"><div class="stars">★★★★★</div><span class="rating-count">(29)</span></div>
+                        <div class="product-price">
+                            <span class="price-old">Rs. 65,000</span>
+                            <span class="price-new">Rs. 45,500</span>
+                            <span class="discount-tag">-30%</span>
+                        </div>
+                        <button class="product-btn"><i class="fas fa-cart-plus"></i> Order on WhatsApp</button>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align:center; margin-top:50px;">
+                <a href="products.html" class="btn btn-primary"><i class="fas fa-th-large"></i> View All Products</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-banner">
+        <div class="container">
+            <div class="cta-content">
+                <h2>🎉 Special Offer - Up to 35% OFF!</h2>
+                <p>Get the best deals on premium medical equipment. Limited stock available!</p>
+                <a href="products.html" class="btn btn-primary" style="background:var(--white);color:var(--primary);"><i class="fas fa-fire"></i> Grab the Deal</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="section testimonials">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">Testimonials</div>
+                <h2 class="section-title">What Our Clients Say</h2>
+                <p class="section-subtitle">Trusted by hospitals and clinics across Sri Lanka</p>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card animate-on-scroll">
+                    <div class="testimonial-quote">"</div>
+                    <p class="testimonial-text">Excellent quality beds! We ordered 20 units for our new ward and the delivery was prompt. Highly recommended!</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">DR</div>
+                        <div class="testimonial-info"><strong>Dr. Rajapaksha</strong><span>Colombo General Hospital</span></div>
+                    </div>
+                </div>
+                <div class="testimonial-card animate-on-scroll delay-1">
+                    <div class="testimonial-quote">"</div>
+                    <p class="testimonial-text">The electric wheelchairs are fantastic. My father loves the comfort and ease of use. Great customer service too!</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">SF</div>
+                        <div class="testimonial-info"><strong>Saman Fernando</strong><span>Kandy, Sri Lanka</span></div>
+                    </div>
+                </div>
+                <div class="testimonial-card animate-on-scroll delay-2">
+                    <div class="testimonial-quote">"</div>
+                    <p class="testimonial-text">Best prices in the market and the warranty gives us peace of mind. We've been ordering from MediTech for 5 years.</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">NP</div>
+                        <div class="testimonial-info"><strong>Nimal Perera</strong><span>Galle Medical Center</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+   <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo">
+                        <img src="https://i.postimg.cc/B63HkgnM/cropped-circle-image-(30).png" alt="MediTech" style="width:45px;height:45px;border-radius:12px;">
+                        Medi<span>Tech</span>
+                    </a>
+                    <p>Leading provider of premium medical beds and chairs in Sri Lanka since 2006.</p>
+                    <div class="footer-socials">
+                        <a href="https://facebook.com/Meditechmedicalfurniture" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="products.html">Products</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="feedback.html">Feedback</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Products</h3>
+                    <ul class="footer-links">
+                        <li><a href="#hospital-beds">Hospital Beds</a></li>
+                        <li><a href="#hospital-chairs">Hospital Chairs</a></li>
+                        <li><a href="#hospital-materials">Hospital Materials</a></li>
+                        <li><a href="#">Wheelchairs</a></li>
+                        <li><a href="#">Accessories</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Contact Info</h3>
+                    <ul class="footer-contact">
+                        <li><span class="icon"><i class="fas fa-map-marker-alt"></i></span> 325, Singhapura, Hokandara</li>
+                        <li><span class="icon"><i class="fas fa-phone"></i></span> 076-942-3681 / 077-623-0425</li>
+                        <li><span class="icon"><i class="fab fa-whatsapp"></i></span> 076-881-5222</li>
+                        <li><span class="icon"><i class="fab fa-facebook"></i></span> @Meditech medical furniture</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 MediTech. All Rights Reserved. | Designed by <a href="https://hexasolutions.online" target="_blank">Hexa Solutions</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="whatsapp-float"><a href="https://wa.me/94768815222" class="whatsapp-btn"><i class="fab fa-whatsapp"></i></a><div class="whatsapp-tooltip">Chat on WhatsApp</div></div>
+    <div class="chatbot-container">
+        <button class="chatbot-toggle" id="chatbotToggle"><i class="fas fa-comments"></i></button>
+        <div class="chatbot-window" id="chatbotWindow">
+            <div class="chatbot-header">
+                <div class="chatbot-header-info"><div class="chatbot-avatar"><i class="fas fa-robot"></i></div><div><h4>MediTech Bot</h4><span>Online</span></div></div>
+                <button class="chatbot-close" id="chatbotClose"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="chatbot-messages" id="chatMessages"><div class="message bot">👋 Hello! Ask about any product.</div></div>
+            <div class="chatbot-input"><input type="text" id="chatInput" placeholder="Type..."><button id="chatSend"><i class="fas fa-paper-plane"></i></button></div>
+        </div>
+    </div>
+    <button class="scroll-top" id="scrollTop"><i class="fas fa-arrow-up"></i></button>
+    <script src="script.js"></script>
+    
+</body>
+</html>

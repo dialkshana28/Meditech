@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - MediTech</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        /* Product Details Toggle Styles */
+        .product-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+            background: var(--light);
+            border-radius: 0 0 var(--radius) var(--radius);
+            margin: 0 20px 20px;
+            padding: 0 20px;
+        }
+        .product-details.active {
+            padding: 20px;
+            border-top: 1px solid var(--light-gray);
+        }
+        .specs-list {
+            list-style: none;
+            margin: 15px 0;
+            font-size: 14px;
+            color: var(--gray);
+        }
+        .specs-list li {
+            padding: 5px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+        .specs-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--success);
+            font-weight: bold;
+        }
+        .product-description {
+            font-size: 14px;
+            color: var(--gray);
+            line-height: 1.6;
+            margin: 15px 0;
+            font-style: italic;
+        }
+        .product-actions-bottom {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--light-gray);
+        }
+        .whatsapp-share-btn, .whatsapp-ask-btn, .view-details-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: var(--transition);
+        }
+        .whatsapp-share-btn {
+            background: #25D366;
+            color: white;
+        }
+        .whatsapp-ask-btn {
+            background: var(--primary);
+            color: white;
+        }
+        .whatsapp-share-btn:hover { background: #128C7E; }
+        .whatsapp-ask-btn:hover { background: var(--primary-dark); }
+        
+        /* Category Section Styles */
+        .category-section {
+            margin: 60px 0;
+        }
+        .category-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--dark);
+            margin: 0 0 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid var(--primary);
+            display: inline-block;
+        }
+        .category-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            background: var(--gradient-1);
+            color: white;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        /* ===== CATEGORY FILTERS ===== */
+        .category-filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 0 20px;
+        }
+
+        .filter-btn {
+            padding: 12px 28px;
+            border: 2px solid var(--light-gray);
+            background: var(--white);
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .filter-btn.active {
+            background: var(--gradient-1);
+            color: var(--white);
+            border-color: transparent;
+            box-shadow: 0 5px 20px rgba(230,57,70,0.3);
+        }
+
+        .filter-btn .count {
+            background: rgba(0,0,0,0.1);
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .filter-btn.active .count {
+            background: rgba(255,255,255,0.25);
+        }
+
+        .product-card.filtered {
+            display: none;
+        }
+
+        /* ===== VIEW DETAILS BUTTON - FULL WIDTH ===== */
+        .view-details-btn {
+            width: calc(100% - 40px);
+            margin: 0 20px 20px;
+            padding: 12px;
+            border: 2px solid var(--light-gray);
+            background: var(--white);
+            color: var(--dark);
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+
+        .view-details-btn:hover {
+            background: var(--light);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .view-details-btn i {
+            transition: transform 0.3s;
+        }
+
+        .view-details-btn.active i {
+            transform: rotate(180deg);
+        }
+
+       
+
+        /* ===== SHARE MODAL ===== */
+        .share-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(5px);
+            z-index: 100000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .share-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .share-modal-content {
+            background: var(--white);
+            padding: 35px;
+            border-radius: var(--radius-lg);
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .share-modal-content h3 {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .share-modal-content p {
+            color: var(--gray);
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+
+        .share-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .share-option {
+            padding: 15px;
+            border: 2px solid var(--light-gray);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .share-option:hover {
+            border-color: var(--primary);
+            background: var(--light);
+            transform: translateY(-3px);
+        }
+
+        .share-option i {
+            font-size: 28px;
+        }
+
+        .share-option.facebook { color: #1877F2; }
+        .share-option.whatsapp { color: #25D366; }
+        .share-option.copy { color: var(--primary); }
+
+        .share-option.facebook:hover { background: rgba(24,119,242,0.1); }
+        .share-option.whatsapp:hover { background: rgba(37,211,102,0.1); }
+        .share-option.copy:hover { background: rgba(0,119,182,0.1); }
+
+        .share-modal-close {
+            padding: 12px 30px;
+            background: var(--light-gray);
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .share-modal-close:hover {
+            background: var(--gray);
+            color: var(--white);
+        }
+
+        .product-url {
+            background: var(--light);
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            color: var(--gray);
+            margin-bottom: 20px;
+            word-break: break-all;
+            border: 1px solid var(--light-gray);
+        }
+        
+        /* ===== MOBILE FILTERS & SHARE MODAL REFINEMENTS ===== */
+      
+        @media (max-width: 480px) {
+            .share-modal-content {
+                padding: 25px 20px !important;
+                margin: 0 15px !important;
+            }
+            
+            .share-modal-content h3 {
+                font-size: 18px !important;
+            }
+            
+            .share-modal-content p {
+                font-size: 13px !important;
+                margin-bottom: 20px !important;
+            }
+            
+            .product-url {
+                font-size: 11px !important;
+                padding: 10px !important;
+                margin-bottom: 18px !important;
+            }
+            
+            .share-options {
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 12px !important;
+            }
+            
+            .share-option {
+                padding: 20px 10px !important;
+                border-radius: 10px !important;
+                min-height: 90px !important;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: center !important;
+                gap: 10px !important;
+            }
+            
+            .share-option i {
+                font-size: 24px !important;
+                width: 40px !important;
+                height: 40px !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                background: rgba(0,0,0,0.05) !important;
+                border-radius: 50% !important;
+            }
+            
+            .share-option span {
+                font-size: 12px !important;
+                font-weight: 600 !important;
+                text-align: center !important;
+            }
+            
+            .share-modal-close {
+                padding: 10px 25px !important;
+                font-size: 13px !important;
+                border-radius: 40px !important;
+            }
+            
+            /* Ensure equal button heights */
+            .share-option {
+                aspect-ratio: auto !important;
+                min-height: 85px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="preloader" id="preloader"><div class="loader"></div></div>
+
+    <header class="header" id="header">
+        <div class="header-top">
+            <div class="container">
+                <div class="header-top-left">
+                    <span><i class="fas fa-phone"></i> 076-942-3681</span>
+                    <span><i class="fas fa-envelope"></i> info@meditech.lk</span>
+                </div>
+            </div>
+        </div>
+        <nav class="navbar">
+            <div class="container">
+                <a href="index.html" class="logo">
+    <img src="https://i.postimg.cc/B63HkgnM/cropped-circle-image-(30).png" alt="MediTech" style="width:45px;height:45px;border-radius:12px;">
+    <div class="logo-text-group">
+        <div class="logo-name">Medi<span>Tech</span></div>
+        <div class="logo-tagline">Medical Furniture</div>
+    </div>
+</a>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="about.html" class="nav-link">About Us</a></li>
+                    <li><a href="products.html" class="nav-link active">Products</a></li>
+                    <li><a href="contact.html" class="nav-link">Contact</a></li>
+                    <li><a href="feedback.html" class="nav-link">Feedback</a></li>
+                    <li><a href="contact.html" class="nav-link nav-btn">Get Quote</a></li>
+                </ul>
+                <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+            </div>
+        </nav>
+    </header>
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+
+    <section class="page-header">
+        <div class="container">
+            <h1>Our Products</h1>
+            <div class="breadcrumb"><a href="index.html">Home</a> <span>/</span> <span>Products</span></div>
+        </div>
+    </section>
+
+    <section class="section products-section" style="padding-top:40px;">
+        <div class="container">
+
+            <!-- ===== CATEGORY FILTERS (Updated Counts) ===== -->
+            <div class="category-filters">
+                <button class="filter-btn active" data-filter="all">
+                    <i class="fas fa-th-large"></i> All Products
+                    <span class="count">16</span>
+                </button>
+                <button class="filter-btn" data-filter="hospital-beds">
+                    <i class="fas fa-bed"></i> Hospital Beds
+                    <span class="count">6</span>
+                </button>
+                <button class="filter-btn" data-filter="hospital-chairs">
+                    <i class="fas fa-chair"></i> Hospital Chairs
+                    <span class="count">5</span>
+                </button>
+                <button class="filter-btn" data-filter="hospital-materials">
+                    <i class="fas fa-boxes"></i> Hospital Materials
+                    <span class="count">5</span>
+                </button>
+            </div>
+
+            <!-- ===== HOSPITAL BEDS (Added Physiotherapy & Examination Beds) ===== -->
+            <div id="hospital-beds" class="category-section" data-category="hospital-beds">
+                
+                <h2 class="category-title">Hospital Beds</h2>
+                <div class="products-grid">
+
+                    <!-- Product 1: Two Function Hospital Bed -->
+                    <div class="product-card animate-on-scroll" data-category="hospital-beds">
+                        <div class="product-image">
+                            <span class="product-badge badge-sale">-25%</span>
+                            <img src="https://i.postimg.cc/KvXH9Xnf/Two-Function-Hospital-Bed.png" alt="Two Function Hospital Bed">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-category">Hospital Beds</div>
+                            <h3 class="product-name">Two Function Hospital Bed</h3>
+                            <div class="product-rating"><div class="stars">★★★★★</div><span>(48)</span></div>
+                            <div class="product-price">
+                                <span class="price-old">Rs. 285,000</span>
+                                <span class="price-new">Rs. 213,750</span>
+                                <span class="discount-tag">-25%</span>
+                            </div>
+                            <button class="product-btn"><i class="fas fa-cart-plus"></i> Order on WhatsApp</button>
+                        </div>
+                        <button class="view-details-btn"><i class="fas fa-chevron-down"></i> <span>View Details</span></button>
+                        <div class="product-details">
+                            <ul class="specs-list">
+                                <li>Head & Leg Sides adjustable</li>
+                                <li>Side Railings included in both side</li>
+                                <li>Have 4 Caster Wheels (2 with Brakes)</li>
+                                <li>75″x 36″x 24″ overall size</li>
+                                <li>Epoxy Powder Coated mild steel frame</li>
+                                <li>Iron Mesh top</li>
+                            </ul>
+                            <p class="product-description">Dual-adjustable hospital beds significantly improve patient recovery by offering customizable positioning for the upper and lower body. This flexibility enhances respiratory function and circulation while mitigating pressure sores.</p>
+                            <div class="product-actions-bottom">
+                                <button class="whatsapp-share-btn" onclick="openShareModal('Two Function Hospital Bed')"><i class="fas fa-share-alt"></i> Share</button>
+                                <button class="whatsapp-ask-btn" onclick="askAboutProduct('Two Function Hospital Bed')"><i class="fas fa-comment"></i> Ask</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product 2: Single Function Hospital Bed -->
+                    <div class="product-card animate-on-scroll delay-1" data-category="hospital-beds">
+                        <div class="product-image">
+                            <span class="product-badge badge-new">NEW</span>
+                            <img src="https://i.postimg.cc/pTp6SRGw/Single-function-bed.png" alt="Single Function Hospital Bed">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-category">Hospital Beds</div>
+                            <h3 class="product-name">Single Function Hospital Bed</h3>
+                            <div class="product-rating"><div class="stars">★★★★★</div><span>(36)</span></div>
+                            <div class="product-price">
+                                <span class="price-old">Rs. 195,000</span>
+                                <span class="price-new">Rs. 149,990</span>
+                                <span class="discount-tag">-23%</span>
+                            </div>
+                            <button class="product-btn"><i class="fas fa-cart-plus"></i> Order on WhatsApp</button>
+                        </div>
+                        <button class="view-details-btn"><i class="fas fa-chevron-down"></i> <span>View Details</span></button>
+                        <div class="product-details">
+                            <ul class="specs-list">
+                                <li>Head Side adjustable</li>
+                                <li>Side Railings included in both side</li>
+                                <li>Have 4 Caster Wheels (2 with Brakes)</li>
+                                <li>75"x 36"x 22" overall size</li>
+                                <li>Epoxy Powder Coated mild steel frame</li>
+                                <li>Iron Mesh top</li>
+                            </ul>
+                            <p class="product-description">Head-adjustable hospital beds offer essential support by improving patient comfort and safety. Their ergonomic design enhances respiration and circulation while assisting caregivers with medical procedures and mobility tasks.</p>
+                            <div class="product-actions-bottom">
+                                <button class="whatsapp-share-btn" onclick="openShareModal('Single Function Hospital Bed')"><i class="fas fa-share-alt"></i> Share</button>
+                                <button class="whatsapp-ask-btn" onclick="askAboutProduct('Single Function Hospital Bed')"><i class="fas fa-comment"></i> Ask</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product 3: Single Function Commode Bed -->
+                    <div class="product-card animate-on-scroll delay-2" data-category="hospital-beds">
+                        <div class="product-image">
+                            <span class="product-badge badge-hot">HOT</span>
+                            <img src="https://i.postimg.cc/bJWBcW4S/Single-Function-Hospital-Commode-Bed.png" alt="Commode Bed">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-category">Hospital Beds</div>
+                            <h3 class="product-name">Single Function Commode Bed</h3>
+                            <div class="product-rating"><div class="stars">★★★★☆</div><span>(72)</span></div>
+                            <div class="product-price">
+                                <span class="price-old">Rs. 220,000</span>
+                                <span class="price-new">Rs. 169,990</span>
+                                <span class="discount-tag">-23%</span>
+                            </div>
+                            <button class="product-btn"><i class="fas fa-cart-plus"></i> Order on WhatsApp</button>
+                        </div>
+                        <button class="view-details-btn"><i class="fas fa-chevron-down"></i> <span>View Details</span></button>
+                        <div class="product-details">
+                            <ul class="specs-list">
+                                <li>Head Side adjustable</li>
+                                <li>Full protection side Railings included</li>
+                                <li>4 Caster Wheels (2 with Brakes)</li>
+                                <li>75″x 36″x 24″ overall size</li>
+                                <li>Epoxy Powder Coated mild steel frame</li>
+                                <li>Iron Mesh top + Mattress included</li>
+                                <li>Has a bucket for commode use</li>
+                            </ul>
+                            <p class="product-description">Hospital commode beds are specialized medical tools designed for patients with severe mobility limitations. Featuring an integrated, removable bucket system, they allow for sanitary waste management directly at the bedside.</p>
+                            <div class="product-actions-bottom">
+                                <button class="whatsapp-share-btn" onclick="openShareModal('Single Function Commode Bed')"><i class="fas fa-share-alt"></i> Share</button>
+                                <button class="whatsapp-ask-btn" onclick="askAboutProduct('Single Function Commode Bed')"><i class="fas fa-comment"></i> Ask</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product 4: Two Function Commode Bed -->
+                    <div class="product-card animate-on-scroll delay-3" data-category="hospital-beds">
+                        <div class="product-image">
+                            <img src="https://i.postimg.cc/vmSPfCYS/Two-function-Hospital-Commode-bed.png" alt="Two Function Commode Bed">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-category">Hospital Beds</div>
+                            <h3 class="product-name">Two Function Commode Bed</h3>
+                            <div class="product-rating"><div class="stars">★★★★★</div><span>(55)</span></div>
+                            <div class="product-price">
+                                <span class="price-old">Rs. 320,000</span>
+                                <span class="price-new">Rs. 256,000</span>
+                                <span class="discount-tag">-20%</span>
+                            </div>
+                            <button class="product-btn"><i class="fas fa-cart-plus"></i> Order on WhatsApp</button>
+                        </div>
+                        <button class="view-details-btn"><i class="fas fa-chevron-down"></i> <span>View Details</span></button>
+                        <div class="product-details">
+                            <ul class="specs-list">
+                                <li>Head & Leg Sides adjustable</li>
+                                <li>Full protection side Railings</li>
+                                <li>4 Caster Wheels (2 with Brakes)</li>
+                                <li>75″x 36″x 24″ overall size</li>
+                                <li>Epoxy Powder Coated mild steel frame</li>
+                                <li>Iron Mesh top + Mattress included</li>
+                                <li>Has a bucket for commode use</li>
+                            </ul>
+                            <p class="product-description">These beds prioritize patient dignity and comfort while significantly reducing the physical strain on healthcare workers, ensuring a hygienic environment and efficient daily care within clinical settings.</p>
+                            <div class="product-actions-bottom">
+                                <button class="whatsapp-share-btn" onclick="openShareModal('Two Function Commode Bed')"><i class="fas fa-share-alt"></i> Share</button>
+                                <button class="whatsapp-ask-btn" onclick="askAboutProduct('Two Function Commode Bed')"><i class="fas fa-comment"></i> Ask</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product 5: Physiotherapy Bed (MOVED HERE) -->
+                    <div class="product-card animate-on-scroll delay-3" data-category="hospital-beds">
+                        <div class="product-image">
+                            <span class="product-badge badge-new">NEW</span>
+                            <img src="https://i.postimg.cc/d1LxfwHn/Physiotherapy-Bed-(With-and-Without-the-face-hole).png" alt="Physiotherapy Bed">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-category">Hospital Beds</div>
+                            <h3 class="product-name">Physiotherapy Bed</h3>
+                            <div class="product-rating"><div class="stars">★★★★★</div><span>(41)</span></div>
+                            <div class="product-price">
+                                <span class="price-old">Rs. 85,000</span>
+                                <span class="price-new">Rs. 68,000</span>
+                                <span class="discount-tag">-20%</span>
+                            </div>
+                            <button class="product-btn"><i class="fas fa-cart-plus"></i> Order on WhatsApp</button>
+                        </div>
+                        <button class="view-details-btn"><i class="fas fa-chevron-down"></i> <span>View Details</span></button>
+                        <div class="product-details">
+                            <ul class="specs-list">
+                                <li>Approx Dimensions: 72"L x 24"W x 32"H</li>
+                                <li>Frame: Rectangular & Square Steel tubes (1.2mm)</li>
+                                <li>With/Without face hole option</li>
+                                <li>Cushioned top for comfort</li>
+                                <li>Legs fitted on PVC stands</li>
+                                <li>Pre-treated & Epoxy Powder Coated finish</li>
+                            </ul>
+                            <p class="product-description">Physiotherapy beds serve as versatile platforms tailored for massage therapy in salons and clinical patient examinations. Essential in physiotherapy clinics for administering rehabilitative exercises and manual treatments.</p>
+                            <div class="product-actions-bottom">
+                                <button class="whatsapp-share-btn" onclick="openShareModal('Physiotherapy Bed')"><i class="fas fa-share-alt"></i> Share</button>
+                                <button class="whatsapp-ask-btn" onclick="askAboutProduct('Physiotherapy Bed')"><i class="fas fa-comment"></i> Ask</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product 6: Examination Bed (MOVED HERE) -->
+                    <div class="product-card animate-on-scroll delay-4" data-category="hospital-beds">
+                        <div class="product-image">
+                            <img src="https://i.postimg.cc/TP2Srrrb/Examination-Bed-Head-Adjustable.png" alt="Examination Bed">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-category">Hospital Beds</div>
+                            <h3 class="product-name">Examination Bed</h3>
+                            <div class="product-rating"><div class="stars">★★★★☆</div><span>(33)</span></div>
+                            <div class="product-price">
+                                <span class="price-old">Rs. 95,000</span>
+                                <span class="price-new">Rs. 76,000</span>
+                                <span class="discount-tag">-20%</span>
+                            </div>
+                            <button class="product-btn"><i class="fas fa-cart-plus"></i> Order on WhatsApp</button>
+                        </div>
+                        <button class="view-details-btn"><i class="fas fa-chevron-down"></i> <span>View Details</span></button>
+                        <div class="product-details">
+                            <ul class="specs-list">
+                                <li>Approx Dimensions: 72"L x 24"W x 32"H</li>
+                                <li>Frame: Steel tubes (1.2mm thickness 2"x1" box bar)</li>
+                                <li>Adjustable Back Rest</li>
+                                <li>Two Section Cushioned top</li>
+                                <li>Legs fitted on PVC stands</li>
+                                <li>Pre-treated & Epoxy Powder Coated</li>
+                            </ul>
+                            <p class="product-description">Examination beds provide a specialized platform for diverse clinical tasks, including ECGs, injury treatment, and routine physical assessments. Their elevated design ensures doctors can access and treat patients with optimal ergonomic efficiency.</p>
+                            <div class="product-actions-bottom">
+                                <button class="whatsapp-share-btn" onclick="openShareModal('Examination Bed')"><i class="fas fa-share-alt"></i> Share</button>
+                                <button class="whatsapp-ask-btn" onclick="askAboutProduct('Examination Bed')"><i class="fas fa-comment"></i> Ask</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ===== HOSPITAL CHAIRS (Physio & Exam removed) ===== -->
+            <div id="hospital-chairs" class="category-section" data-category="hospital-chairs">
+                
+                <h2 class="category-title">Hospital Chairs</h2>
+                <div class="products-grid">
+
+                    <!-- Product 7: Basic Wheel Chair -->
+                    <div class="product-card animate-on-scroll" data-category="hospital-chairs">
+                        <div class="product-image">
+                            <span class="product-badge badge-sale">-30%</span>
+                            <img src="https://i.postimg.cc/Z5v0Jd9B/Basic-Wheel-Chair.png" alt="Basic Wheelchair">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-category">Hospital Chairs</div>
+                            <h3 class="product-name">Basic Wheel Chair</h3>
+                            <div class="product-rating"><div class="stars">★★★★★</div><span>(91)</span></div>
+                            <div class="product-price">
+                                <span class="price-old">Rs. 65,000</span>
+                                <span class="price-new">Rs. 45,500</span>
+                                <span class="discount-tag">-30%</span>
+                            </div>
+                            <button class="product-btn"><i class="fas fa-cart-plus"></i> Order on WhatsApp</button>
+                        </div>
+                        <button class="view-details-btn"><i class="fas fa-chevron-down"></i> <span>View Details</span></button>
+                        <div class="product-details">
+                            <ul class="specs-list">
+                                <li>6 Months Warranty</li>
+                                <li>Fold-able design for easy storage</li>
+                                <li>Chrome Plated Material</li>
+                                <li>Comfortable Rexene Seat</li>
+                                <li>Lockable Wheels for safety</li>
+                                <li>Easy movement hand grip</li>
+                            </ul>
+                            <p class="product-description">Mobility aids, such as wheelchairs, are essential devices for individuals facing walking difficulties due to aging, injury, or chronic illness. By supporting those with conditions like spinal cord injuries, these tools restore independence.</p>
+                            <div class="product-actions-bottom">
+                                <button class="whatsapp-share-btn" onclick="openShareModal('Basic Wheel Chair')"><i class="fas fa-share-alt"></i> Share</button>
+                                <button class="whatsapp-ask-btn" onclick="askAboutProduct('Basic Wheel Chair')"><i class="fas fa-comment"></i> Ask</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product 8: Blood Collection Chair -->
+                    <div class="product-card animate-on-scroll delay-1" data-category="hospital-chairs">
+                        <div class="product-image">
+                            <span class="product-badge badge-hot">HOT</span>
+                            <img src="https://i.postimg.cc/xT4crRd0/Blood-Collection-Chair.png" alt="Blood Collection Chair">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-category">Hospital Chairs</div>
+                            <h3 class="product-name">Blood Collection Chair</h3>
+                            <div class="product-rating"><div class="stars">★★★★★</div><span>(28)</span></div>
+                            <div class="product-price">
+                                <span class="price-old">Rs. 145,000</span>
+                                <span class="price-new">Rs. 116,000</span>
+                                <span class="discount-tag">-20%</span>
+                            </div>
+                            <button class="product-btn"><i class="fas fa-cart-plus"></i> Order on WhatsApp</button>
+                        </div>
+                        <button class="view-details-btn"><i class="fas fa-chevron-down"></i> <span>View Details</span></button>
+                        <div class="product-details">
+                            <ul class="specs-list">
+                                <li>Arm rest adjustable</li>
+                                <li>Seat height 20″ | Overall height 42″</li>
+                                <li>Seat width 20″ | Overall width 36″</li>
+                                <li>Arm height range 26″- 36″</li>
+                                <li>High patient load capacity</li>
+                                <li>Ergonomic design for phlebotomy</li>
+                            </ul>
+                            <p class="product-description">Designed for clinical efficiency and patient comfort, this professional Blood Collection Chair features a spacious 20″ wide seat. It offers exceptional versatility with adjustable armrests ranging from 26″ to 36″, ensuring precise positioning for phlebotomy.</p>
+                            <div class="product-actions-bottom">
+                                <button class="whatsapp-share-btn" onclick="openShareModal('Blood Collection Chair')"><i class="fas fa-share-alt"></i> Share</button>
+                                <button class="whatsapp-ask-btn" onclick="askAboutProduct('Blood Collection Chair')"><i class="fas fa-comment"></i> Ask</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product 9: Commode Wheel Chair (With Wheels) -->
+                    <div class="product-card animate-on-scroll delay-2" data-category="hospital-chairs">
+                        <div class="product-image">
+                            <img src="https://i.postimg.cc/kX4BhZq1/Commode-Wheel-Chair.png" alt="Commode Wheelchair">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-category">Hospital Chairs</div>
+                            <h3 class="product-name">Commode Wheel Chair (With Wheels)</h3>
+                            <div class="product-rating"><div class="stars">★★★★☆</div><span>(44)</span></div>
+                            <div class="product-price">
+                                <span class="price-old">Rs. 125,000</span>
+                                <span class="price-new">Rs. 99,990</span>
+                                <span class="discount-tag">-20%</span>
+                            </div>
+                            <button class="product-btn"><i class="fas fa-cart-plus"></i> Order on WhatsApp</button>
+                        </div>
+                        <button class="view-details-btn"><i class="fas fa-chevron-down"></i> <span>View Details</span></button>
+                        <div class="product-details">
+                            <ul class="specs-list">
+                                <li>Chrome-plating steel frame</li>
+                                <li>Fixed armrest and footrest</li>
+                                <li>8" solid front wheels, 24" solid rear wheels</li>
+                                <li>Soft black PVC 'U' Shape seat back cushion</li>
+                                <li>Detachable Commode bucket</li>
+                                <li>Foldable design</li>
+                            </ul>
+                            <p class="product-description">This specialized commode wheelchair features a foldable chrome steel frame and cushioned seating to assist elderly or disabled individuals with limited mobility. Equipped with a detachable footrest and integrated toilet seat.</p>
+                            <div class="product-actions-bottom">
+                                <button class="whatsapp-share-btn" onclick="openShareModal('Commode Wheel Chair')"><i class="fas fa-share-alt"></i> Share</button>
+                                <button class="whatsapp-ask-btn" onclick="askAboutProduct('Commode Wheel Chair')"><i class="fas fa-comment"></i> Ask</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product 10: Commode Chair (With Wheels) -->
+                    <div class="product-card animate-on-scroll delay-3" data-category="hospital-chairs">
+                        <div class="product-image">
+                            <span class="product-badge badge-new">Popular</span>
+                            <img src="https://i.postimg.cc/tCMY054K/Commode-Chair-with-Wheels.png" alt="Commode Chair">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-category">Hospital Chairs</div>
+                            <h3 class="product-name">Commode Chair (With/Without Wheels)</h3>
+                            <div class="product-rating"><div class="stars">★★★★★</div><span>(37)</span></div>
+                            <div class="product-price">
+                                <span class="price-old">Rs. 45,000</span>
+                                <span class="price-new">Rs. 35,990</span>
+                                <span class="discount-tag">-20%</span>
+                            </div>
+                            <button class="product-btn"><i class="fas fa-cart-plus"></i> Order on WhatsApp</button>
+                        </div>
+                        <button class="view-details-btn"><i class="fas fa-chevron-down"></i> <span>View Details</span></button>
+                        <div class="product-details">
+                            <ul class="specs-list">
+                                <li><strong>With Wheels:</strong> Chromed Steel Frame, Plastic Seat, Foldable, Height Adjustable, Lockable Castor wheel</li>
+                                
+                                <li>Can be used directly over home Toilet</li>
+                                <li>Removable Bowl for easy cleaning</li>
+                            </ul>
+                            <p class="product-description">Commode chairs provide a practical, portable toileting solution for elderly individuals or people with significant physical disabilities. Designed specifically for those who are bedbound or have severe difficulty reaching a traditional bathroom.</p>
+                            <div class="product-actions-bottom">
+                                <button class="whatsapp-share-btn" onclick="openShareModal('Commode Chair')"><i class="fas fa-share-alt"></i> Share</button>
+                                <button class="whatsapp-ask-btn" onclick="askAboutProduct('Commode Chair')"><i class="fas fa-comment"></i> Ask</button>
+                            </div>
+                        </div>
+</div>
+<div class="product-card animate-on-scroll delay-3" data-category="hospital-chairs">
+                        <div class="product-image">
+                            <span class="product-badge badge-new">Popular</span>
+                            <img src="https://i.postimg.cc/dtLV9yj7/Commode-Chair-without-Wheels.png" alt="Commode Chair">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-category">Hospital Chairs</div>
+                            <h3 class="product-name">Commode Chair (Without Wheels)</h3>
+                            <div class="product-rating"><div class="stars">★★★★★</div><span>(37)</span></div>
+                            <div class="product-price">
+                                <span class="price-old">Rs. 45,000</span>
+                                <span class="price-new">Rs. 35,990</span>
+                                <span class="discount-tag">-20%</span>
+                            </div>
+                            <button class="product-btn"><i class="fas fa-cart-plus"></i> Order on WhatsApp</button>
+                        </div>
+                        <button class="view-details-btn"><i class="fas fa-chevron-down"></i> <span>View Details</span></button>
+                        <div class="product-details">
+                            <ul class="specs-list">
+                                
+                                <li><strong>Without Wheels:</strong> Detachable Plastic Bucket with Cover, Chrome Plated, Height Adjustable</li>
+                                <li>Can be used directly over home Toilet</li>
+                                <li>Removable Bowl for easy cleaning</li>
+                            </ul>
+                            <p class="product-description">Commode chairs provide a practical, portable toileting solution for elderly individuals or people with significant physical disabilities. Designed specifically for those who are bedbound or have severe difficulty reaching a traditional bathroom.</p>
+                            <div class="product-actions-bottom">
+                                <button class="whatsapp-share-btn" onclick="openShareModal('Commode Chair')"><i class="fas fa-share-alt"></i> Share</button>
+                                <button class="whatsapp-ask-btn" onclick="askAboutProduct('Commode Chair')"><i class="fas fa-comment"></i> Ask</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ===== HOSPITAL MATERIALS ===== -->
+            <div id="hospital-materials" class="category-section" data-category="hospital-materials">
+               
+                <h2 class="category-title">Hospital Materials</h2>
+                <div class="products-grid">
+
+                    <!-- Product 11: Medical Air Mattress -->
+                    <div class="product-card animate-on-scroll" data-category="hospital-materials">
+                        <div class="product-image">
+                            <span class="product-badge badge-sale">-15%</span>
+                            <img src="https://i.postimg.cc/8PpNyrdt/Air-Mattress-2.jpg" alt="Medical Air Mattress">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-category">Hospital Materials</div>
+                            <h3 class="product-name">Medical Air Mattress</h3>
+                            <div class="product-rating"><div class="stars">★★★★★</div><span>(52)</span></div>
+                            <div class="product-price">
+                                <span class="price-old">Rs. 35,000</span>
+                                <span class="price-new">Rs. 29,750</span>
+                                <span class="discount-tag">-15%</span>
+                            </div>
+                            <button class="product-btn"><i class="fas fa-cart-plus"></i> Order on WhatsApp</button>
+                        </div>
+                        <button class="view-details-btn"><i class="fas fa-chevron-down"></i> <span>View Details</span></button>
+                        <div class="product-details">
+                            <ul class="specs-list">
+                                <li>Medical-grade, latex-free PVC material</li>
+                                <li>Innovative interlocking bubble design</li>
+                                <li>Microcomputer-controlled silent pump</li>
+                                <li>Air circulation every 10 minutes</li>
+                                <li>150kg weight capacity</li>
+                                <li>Adjustable pressure settings</li>
+                                <li>CE, ISO, and NMRA approved</li>
+                            </ul>
+                            <p class="product-description">This medical-grade air mattress utilizes an innovative interlocking bubble design to prevent pressure ulcers. The microcomputer-controlled pump operates silently, circulating air every ten minutes to ensure continuous pressure redistribution.</p>
+                            <div class="product-actions-bottom">
+                                <button class="whatsapp-share-btn" onclick="openShareModal('Medical Air Mattress')"><i class="fas fa-share-alt"></i> Share</button>
+                                <button class="whatsapp-ask-btn" onclick="askAboutProduct('Medical Air Mattress')"><i class="fas fa-comment"></i> Ask</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product 12: Bed Side Locker -->
+                    <div class="product-card animate-on-scroll delay-1" data-category="hospital-materials">
+                        <div class="product-image">
+                            <img src="https://i.postimg.cc/Jzh7hBGK/Bed-Side-Locker.png" alt="Bed Side Locker">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-category">Hospital Materials</div>
+                            <h3 class="product-name">Bed Side Locker</h3>
+                            <div class="product-rating"><div class="stars">★★★★☆</div><span>(19)</span></div>
+                            <div class="product-price">
+                                <span class="price-old">Rs. 18,000</span>
+                                <span class="price-new">Rs. 14,400</span>
+                                <span class="discount-tag">-20%</span>
+                            </div>
+                            <button class="product-btn"><i class="fas fa-cart-plus"></i> Order on WhatsApp</button>
+                        </div>
+                        <button class="view-details-btn"><i class="fas fa-chevron-down"></i> <span>View Details</span></button>
+                        <div class="product-details">
+                            <ul class="specs-list">
+                                <li>One Drawer + One Locker compartment</li>
+                                <li>Dimensions: L 400mm x W 400mm x H 850mm</li>
+                                <li>Steel powder coated finish</li>
+                                <li>0.7 M/S Sheet construction</li>
+                                <li>Durable and easy to clean</li>
+                                <li>Perfect for bedside storage</li>
+                            </ul>
+                            <p class="product-description">A practical bedside storage solution for hospitals and home care. Keeps patient essentials organized and within easy reach while maintaining a clean, professional appearance in any medical setting.</p>
+                            <div class="product-actions-bottom">
+                                <button class="whatsapp-share-btn" onclick="openShareModal('Bed Side Locker')"><i class="fas fa-share-alt"></i> Share</button>
+                                <button class="whatsapp-ask-btn" onclick="askAboutProduct('Bed Side Locker')"><i class="fas fa-comment"></i> Ask</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product 13: Bed Side Screen (3/4 Fold) -->
+                    <div class="product-card animate-on-scroll delay-2" data-category="hospital-materials">
+                        <div class="product-image">
+                            <span class="product-badge badge-new">2 Styles</span>
+                            <img src="https://i.postimg.cc/VLgL1FLv/Bed-Side-Screen-3-Fold.png" alt="Bed Side Screen">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-category">Hospital Materials</div>
+                            <h3 class="product-name">Bed Side Screen (3-Fold)</h3>
+                            <div class="product-rating"><div class="stars">★★★★★</div><span>(25)</span></div>
+                            <div class="product-price">
+                                <span class="price-old">Rs. 42,000</span>
+                                <span class="price-new">Rs. 33,600</span>
+                                <span class="discount-tag">-20%</span>
+                            </div>
+                            <button class="product-btn"><i class="fas fa-cart-plus"></i> Order on WhatsApp</button>
+                        </div>
+                        <button class="view-details-btn"><i class="fas fa-chevron-down"></i> <span>View Details</span></button>
+                        <div class="product-details">
+                            <ul class="specs-list">
+                                <li>Framework made of round stainless steel tubes</li>
+                                <li>Available in 3-fold configurations</li>
+                                <li>Moves on six 5cm wheels for easy portability</li>
+                                <li>Full stainless Steel construction</li>
+                                <li>Blue color fabric panels for privacy</li>
+                                <li>Easy to position between patient beds</li>
+                            </ul>
+                            <p class="product-description">This premium Bedside Screen features a robust stainless steel framework. Available in 3-fold or 4-fold configurations, the unit provides versatile privacy for medical settings with vibrant blue fabric panels and smooth mobility.</p>
+                            <div class="product-actions-bottom">
+                                <button class="whatsapp-share-btn" onclick="openShareModal('Bed Side Screen')"><i class="fas fa-share-alt"></i> Share</button>
+                                <button class="whatsapp-ask-btn" onclick="askAboutProduct('Bed Side Screen')"><i class="fas fa-comment"></i> Ask</button>
+                            </div>
+                        </div>
+                    </div>
+
+<!-- Product 13: Bed Side Screen (3/4 Fold) -->
+                    <div class="product-card animate-on-scroll delay-2" data-category="hospital-materials">
+                        <div class="product-image">
+                            <span class="product-badge badge-new">New</span>
+                            <img src="https://i.postimg.cc/4NPNZ14L/Bed-Side-Screen-4-Fold.png" alt="Bed Side Screen">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-category">Hospital Materials</div>
+                            <h3 class="product-name">Bed Side Screen (4-Fold)</h3>
+                            <div class="product-rating"><div class="stars">★★★★★</div><span>(22)</span></div>
+                            <div class="product-price">
+                                <span class="price-old">Rs. 42,000</span>
+                                <span class="price-new">Rs. 33,600</span>
+                                <span class="discount-tag">-20%</span>
+                            </div>
+                            <button class="product-btn"><i class="fas fa-cart-plus"></i> Order on WhatsApp</button>
+                        </div>
+                        <button class="view-details-btn"><i class="fas fa-chevron-down"></i> <span>View Details</span></button>
+                        <div class="product-details">
+                            <ul class="specs-list">
+                                <li>Framework made of round stainless steel tubes</li>
+                                <li>Available in 4-fold configurations</li>
+                                <li>Moves on six 5cm wheels for easy portability</li>
+                                <li>Full stainless Steel construction</li>
+                                <li>Blue color fabric panels for privacy</li>
+                                <li>Easy to position between patient beds</li>
+                            </ul>
+                            <p class="product-description">This premium Bedside Screen features a robust stainless steel framework. Available in 3-fold or 4-fold configurations, the unit provides versatile privacy for medical settings with vibrant blue fabric panels and smooth mobility.</p>
+                            <div class="product-actions-bottom">
+                                <button class="whatsapp-share-btn" onclick="openShareModal('Bed Side Screen')"><i class="fas fa-share-alt"></i> Share</button>
+                                <button class="whatsapp-ask-btn" onclick="askAboutProduct('Bed Side Screen')"><i class="fas fa-comment"></i> Ask</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product 14: Over Bed Table -->
+                    <div class="product-card animate-on-scroll delay-3" data-category="hospital-materials">
+                        <div class="product-image">
+                            <img src="https://i.postimg.cc/XJtBfkBL/over-Bed-Table.png" alt="Over Bed Table">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-category">Hospital Materials</div>
+                            <h3 class="product-name">Over Bed Table</h3>
+                            <div class="product-rating"><div class="stars">★★★★☆</div><span>(31)</span></div>
+                            <div class="product-price">
+                                <span class="price-old">Rs. 22,000</span>
+                                <span class="price-new">Rs. 17,600</span>
+                                <span class="discount-tag">-20%</span>
+                            </div>
+                            <button class="product-btn"><i class="fas fa-cart-plus"></i> Order on WhatsApp</button>
+                        </div>
+                        <button class="view-details-btn"><i class="fas fa-chevron-down"></i> <span>View Details</span></button>
+                        <div class="product-details">
+                            <ul class="specs-list">
+                                <li>Width 16″ | Length 32″</li>
+                                <li>Height adjustable: 30″-42″</li>
+                                <li>4 caster wheels (2 lockable)</li>
+                                <li>Durable Melamine Top surface</li>
+                                <li>Epoxy Powder Coated frame</li>
+                                <li>Easy to clean and maintain</li>
+                            </ul>
+                            <p class="product-description">A versatile over-bed table designed for patient comfort and caregiver convenience. Height-adjustable design allows customization for sitting or lying positions, while lockable wheels ensure stability during use.</p>
+                            <div class="product-actions-bottom">
+                                <button class="whatsapp-share-btn" onclick="openShareModal('Over Bed Table')"><i class="fas fa-share-alt"></i> Share</button>
+                                <button class="whatsapp-ask-btn" onclick="askAboutProduct('Over Bed Table')"><i class="fas fa-comment"></i> Ask</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- CTA Banner -->
+            <div class="cta-banner" style="margin:80px 0;">
+                <div class="container">
+                    <div class="cta-content">
+                        <h2>🏷️ Need Bulk Order? Get Special Pricing!</h2>
+                        <p>Contact us for wholesale discounts on orders of 10+ units. Rental options also available!</p>
+                        <a href="https://wa.me/94768815222?text=Hi%20MediTech!%20I'm%20interested%20in%20bulk%20order%20pricing.%20Please%20contact%20me." class="btn btn-primary" style="background:var(--white);color:var(--primary);"><i class="fab fa-whatsapp"></i> WhatsApp Us Now</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Share Modal -->
+    <div class="share-modal" id="shareModal">
+        <div class="share-modal-content">
+            <h3><i class="fas fa-share-alt" style="color:var(--primary);margin-right:10px;"></i>Share Product</h3>
+            <p>Share this product with your friends and family</p>
+            <div class="product-url" id="shareProductUrl">https://meditech.lk/products.html</div>
+            <div class="share-options">
+                <div class="share-option facebook" onclick="shareToFacebook()">
+                    <i class="fab fa-facebook"></i>
+                    <span>Facebook</span>
+                </div>
+                <div class="share-option whatsapp" onclick="shareToWhatsApp()">
+                    <i class="fab fa-whatsapp"></i>
+                    <span>WhatsApp</span>
+                </div>
+                <div class="share-option copy" onclick="copyToClipboard()">
+                    <i class="fas fa-link"></i>
+                    <span>Copy Link</span>
+                </div>
+            </div>
+            <button class="share-modal-close" onclick="closeShareModal()">Close</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo">
+                        <img src="https://i.postimg.cc/B63HkgnM/cropped-circle-image-(30).png" alt="MediTech" style="width:45px;height:45px;border-radius:12px;">
+                        Medi<span>Tech</span>
+                    </a>
+                    <p>Leading provider of premium medical beds and chairs in Sri Lanka since 2006.</p>
+                    <div class="footer-socials">
+                        <a href="https://facebook.com/Meditechmedicalfurniture" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="products.html">Products</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="feedback.html">Feedback</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Products</h3>
+                    <ul class="footer-links">
+                        <li><a href="#hospital-beds">Hospital Beds</a></li>
+                        <li><a href="#hospital-chairs">Hospital Chairs</a></li>
+                        <li><a href="#hospital-materials">Hospital Materials</a></li>
+                        <li><a href="#">Wheelchairs</a></li>
+                        <li><a href="#">Accessories</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Contact Info</h3>
+                    <ul class="footer-contact">
+                        <li><span class="icon"><i class="fas fa-map-marker-alt"></i></span> 325, Singhapura, Hokandara</li>
+                        <li><span class="icon"><i class="fas fa-phone"></i></span> 076-942-3681 / 077-623-0425</li>
+                        <li><span class="icon"><i class="fab fa-whatsapp"></i></span> 076-881-5222</li>
+                        <li><span class="icon"><i class="fab fa-facebook"></i></span> @Meditech medical furniture</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 MediTech. All Rights Reserved. | Designed by <a href="https://hexasolutions.online" target="_blank">Hexa Solutions</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="whatsapp-float"><a href="https://wa.me/94768815222" class="whatsapp-btn"><i class="fab fa-whatsapp"></i></a><div class="whatsapp-tooltip">Chat on WhatsApp</div></div>
+    <div class="chatbot-container">
+        <button class="chatbot-toggle" id="chatbotToggle"><i class="fas fa-comments"></i></button>
+        <div class="chatbot-window" id="chatbotWindow">
+            <div class="chatbot-header">
+                <div class="chatbot-header-info"><div class="chatbot-avatar"><i class="fas fa-robot"></i></div><div><h4>MediTech Bot</h4><span>Online</span></div></div>
+                <button class="chatbot-close" id="chatbotClose"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="chatbot-messages" id="chatMessages"><div class="message bot">👋 Hello! Ask about any product.</div></div>
+            <div class="chatbot-input"><input type="text" id="chatInput" placeholder="Type..."><button id="chatSend"><i class="fas fa-paper-plane"></i></button></div>
+        </div>
+    </div>
+    <button class="scroll-top" id="scrollTop"><i class="fas fa-arrow-up"></i></button>
+    <script src="script.js"></script>
+    
+</body>
+</html>
