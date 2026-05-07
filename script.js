@@ -324,7 +324,7 @@ document.addEventListener('DOMContentLoaded', function() {
             this.style.background = 'var(--success)';
             setTimeout(() => {
                 const msg = `🛒 *NEW ORDER REQUEST*\n\n*Product:* ${name}\n\nPlease contact me to confirm pricing, delivery, and payment options. Thank you!`;
-                window.open(`https://wa.me/94764720487?text=${encodeURIComponent(msg)}`, '_blank');
+                window.open(`https://wa.me/94768815222?text=${encodeURIComponent(msg)}`, '_blank');
                 setTimeout(() => {
                     this.innerHTML = original;
                     this.style.background = '';
