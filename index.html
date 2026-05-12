@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MediTech Medical Furniture</title>
+    <title>MediTech - Medical Furniture</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="icon" href="https://i.postimg.cc/B63HkgnM/cropped-circle-image-(30).png" type="image/png">
@@ -311,7 +311,26 @@
         </div>
     </div>
     <button class="scroll-top" id="scrollTop"><i class="fas fa-arrow-up"></i></button>
-    <script src="script.js"></script>
+   <!-- ✅ Firebase SDK + Config (ADD THIS) -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyBa7TbDQDQzDnOhZD5xp-iakhyHgxoG3EY",
+    authDomain: "meditechh-3feb0.firebaseapp.com",
+    databaseURL: "https://meditechh-3feb0-default-rtdb.firebaseio.com",
+    projectId: "meditechh-3feb0",
+    storageBucket: "meditechh-3feb0.firebasestorage.app",
+    messagingSenderId: "698299080912",
+    appId: "1:698299080912:web:ba005d3408910a547f3ed5",
+    measurementId: "G-PHQSH59MEZ"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+</script>
+
+<!-- Your existing script -->
+<script src="script.js"></script>
     
 </body>
 </html>
