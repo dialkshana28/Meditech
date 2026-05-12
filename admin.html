@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admin Panel | MediTech</title>
+  <title>Admin Panel|MediTech</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <style>
@@ -127,12 +127,7 @@
             <input type="number" class="price-input new-price-input" value="169990" placeholder="New Price"/>
             <span class="discount-badge">-23%</span>
           </div>
-          <div class="product-row">
-            <span class="product-name">Basic Wheel Chair</span>
-            <input type="number" class="price-input old-price-input" value="65000" placeholder="Old Price"/>
-            <input type="number" class="price-input new-price-input" value="45500" placeholder="New Price"/>
-            <span class="discount-badge">-30%</span>
-          </div>
+         
           <div class="product-row">
             <span class="product-name">Two Function Commode Bed</span>
             <input type="number" class="price-input old-price-input" value="320000" placeholder="Old Price"/>
@@ -150,6 +145,12 @@
             <input type="number" class="price-input old-price-input" value="95000" placeholder="Old Price"/>
             <input type="number" class="price-input new-price-input" value="76000" placeholder="New Price"/>
             <span class="discount-badge">-20%</span>
+          </div>
+           <div class="product-row">
+            <span class="product-name">Basic Wheel Chair</span>
+            <input type="number" class="price-input old-price-input" value="65000" placeholder="Old Price"/>
+            <input type="number" class="price-input new-price-input" value="45500" placeholder="New Price"/>
+            <span class="discount-badge">-30%</span>
           </div>
           <div class="product-row">
             <span class="product-name">Blood Collection Chair</span>
@@ -245,7 +246,7 @@
       const loginError = document.getElementById('loginError');
       const logoutBtn = document.getElementById('logoutBtn');
 
-      const ADMIN_PASS = 'jr2325meditech'; // Change for production
+      const ADMIN_PASS = 'd'; // Change for production
 
       loginBtn.addEventListener('click', function() {
         if (adminPassword.value === ADMIN_PASS) {
