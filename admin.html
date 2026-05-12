@@ -1,154 +1,398 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel | MediTech</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        .admin-login { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--light); display: flex; align-items: center; justify-content: center; z-index: 9999; }
-        .login-box { background: white; padding: 40px; border-radius: 16px; box-shadow: var(--shadow-lg); text-align: center; max-width: 400px; width: 90%; }
-        .login-box h2 { color: var(--primary); margin-bottom: 10px; }
-        .login-box input { width: 100%; padding: 12px; margin: 15px 0; border: 2px solid var(--light-gray); border-radius: 8px; }
-        .login-box button { width: 100%; padding: 12px; background: var(--gradient-1); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
-        .error-msg { color: var(--danger); font-size: 14px; margin-top: 10px; display: none; }
-        .admin-panel { display: none; max-width: 900px; margin: 80px auto 40px; padding: 20px; }
-        .price-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 10px; margin-bottom: 10px; align-items: center; background: var(--white); padding: 12px; border-radius: 10px; border: 1px solid var(--light-gray); }
-        .price-row input { padding: 10px; border: 2px solid var(--light-gray); border-radius: 8px; width: 100%; }
-        .price-row .label { font-weight: 600; color: var(--dark); }
-        .admin-actions { margin-top: 20px; display: flex; gap: 10px; }
-        .admin-actions button { padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
-        #saveBtn { background: var(--gradient-1); color: white; }
-        #resetBtn { background: var(--light); color: var(--dark); border: 1px solid var(--light-gray); }
-        #status { margin-top: 10px; font-weight: 500; min-height: 20px; }
-        @media(max-width: 768px) { .price-row { grid-template-columns: 1fr; } }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Panel | MediTech</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    /* Admin-specific styles - kept minimal & non-intrusive */
+    .admin-container { max-width: 900px; margin: 100px auto 40px; padding: 0 20px; }
+    .admin-card { background: #fff; border-radius: 16px; padding: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); margin-bottom: 25px; }
+    .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
+    .admin-title { font-size: 24px; font-weight: 700; color: #1B1B2F; }
+    .logout-btn { background: #e74c3c; color: #fff; border: none; padding: 10px 20px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+    .logout-btn:hover { background: #c0392b; transform: translateY(-2px); }
+    .product-row { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 15px; align-items: center; padding: 15px 0; border-bottom: 1px solid #f1f1f1; }
+    .product-row:last-child { border-bottom: none; }
+    .product-name { font-weight: 600; color: #1B1B2F; }
+    .price-input { width: 100%; padding: 10px 14px; border: 2px solid #e9ecef; border-radius: 10px; font-size: 15px; transition: 0.3s; }
+    .price-input:focus { outline: none; border-color: #E63946; box-shadow: 0 0 0 4px rgba(230,57,70,0.1); }
+    .discount-badge { background: rgba(231,76,60,0.1); color: #e74c3c; padding: 5px 12px; border-radius: 8px; font-weight: 700; font-size: 13px; }
+    .update-btn { background: linear-gradient(135deg, #E63946, #FF6B6B); color: #fff; border: none; padding: 12px 28px; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 8px; }
+    .update-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(230,57,70,0.4); }
+    .update-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .success-msg { background: rgba(46,204,113,0.15); color: #27ae60; padding: 12px 20px; border-radius: 10px; margin-bottom: 20px; display: none; font-weight: 600; }
+    .login-container { max-width: 450px; margin: 120px auto; padding: 40px; background: #fff; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.12); text-align: center; }
+    .login-title { font-size: 22px; font-weight: 700; margin-bottom: 25px; color: #1B1B2F; }
+    .login-input { width: 100%; padding: 14px 18px; border: 2px solid #e9ecef; border-radius: 12px; font-size: 15px; margin-bottom: 15px; transition: 0.3s; }
+    .login-input:focus { outline: none; border-color: #E63946; }
+    .login-btn { width: 100%; padding: 14px; background: linear-gradient(135deg, #E63946, #FF6B6B); color: #fff; border: none; border-radius: 12px; font-weight: 700; font-size: 16px; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+    .login-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(230,57,70,0.4); }
+    .error-msg { color: #e74c3c; font-size: 14px; margin-top: 10px; display: none; }
+    .reset-btn { background: #6c757d; color: #fff; border: none; padding: 10px 20px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: 0.3s; margin-left: 10px; }
+    .reset-btn:hover { background: #5a6268; }
+    @media (max-width: 768px) {
+      .product-row { grid-template-columns: 1fr; gap: 10px; text-align: center; }
+      .admin-header { flex-direction: column; gap: 15px; text-align: center; }
+    }
+  </style>
 </head>
 <body>
-    <!-- Login Screen -->
-    <div class="admin-login" id="loginScreen">
-      <div class="login-box">
-        <h2><i class="fas fa-lock"></i> Admin Access</h2>
-        <p>Enter your password to manage product pricing</p>
-        <input type="password" id="adminPass" placeholder="Password">
-        <button onclick="checkLogin()">Secure Login</button>
-        <p class="error-msg" id="loginError">⚠️ Incorrect password. Please try again.</p>
+
+  <!-- ===== LOGIN SCREEN ===== -->
+  <div id="loginScreen" class="login-container">
+    <h2 class="login-title">🔐 Admin Access</h2>
+    <p style="color:#6c757d; margin-bottom:20px;">Enter your password to manage product pricing</p>
+    <input type="password" id="adminPassword" class="login-input" placeholder="Enter admin password" />
+    <button id="loginBtn" class="login-btn">Secure Login</button>
+    <p id="loginError" class="error-msg">⚠️ Incorrect password. Please try again.</p>
+  </div>
+
+  <!-- ===== ADMIN PANEL (Hidden until login) ===== -->
+  <div id="adminPanel" style="display:none;">
+    
+    <!-- Header -->
+    <header class="header" id="header">
+      <div class="header-top">
+        <div class="container">
+          <div class="header-top-left">
+            <span><i class="fas fa-phone"></i> 076-942-3681</span>
+            <span><i class="fas fa-envelope"></i> info@meditech.lk</span>
+          </div>
+        </div>
       </div>
-    </div>
-
-    <!-- Admin Panel -->
-    <div class="admin-panel" id="adminPanel">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-        <h2><i class="fas fa-cogs"></i> MediTech Admin Panel</h2>
-        <button onclick="logout()" style="padding:8px 16px; background:var(--danger); color:white; border:none; border-radius:6px; cursor:pointer;">Logout</button>
-      </div>
-      <p style="color:#666; margin-bottom:20px;">Changes are saved to the cloud automatically. All devices will update instantly.</p>
-
-      <div id="priceEditor"></div>
-
-      <div class="admin-actions">
-        <button id="saveBtn" onclick="saveToCloud()">💾 Save All Prices to Cloud</button>
-        <button id="resetBtn" onclick="loadFromCloud()">🔄 Refresh / Load Latest</button>
-      </div>
-      <p id="status"></p>
-    </div>
-
-    <script>
-      // 🔑 ADMIN CLOUD CONFIGURATION
-      const ADMIN_CONFIG = {
-        WRITE_KEY: '$2a$10$.mXd8/sjnbUDugk691cwLu4eti7uFFlY1K.7/Hkja.3avSFQDycgi', // Replace with JSONbin Write Key
-        BIN_ID: '6a032124c0954111d810f38b'            // Replace with your Bin ID
-      };
-
-      let productData = [];
-
-      // Simple Password Check (Change 'meditech2026' to your desired password)
-      function checkLogin() {
-        const pass = document.getElementById('adminPass').value;
-        if(pass === 'meditech2026') {
-          document.getElementById('loginScreen').style.display = 'none';
-          document.getElementById('adminPanel').style.display = 'block';
-          loadFromCloud();
-        } else {
-          document.getElementById('loginError').style.display = 'block';
-        }
-      }
-      function logout() { location.reload(); }
-
-      // Load prices from cloud
-      async function loadFromCloud() {
-        const status = document.getElementById('status');
-        status.textContent = '⏳ Loading prices...';
-        try {
-          const res = await fetch(`https://api.jsonbin.io/v3/b/${ADMIN_CONFIG.BIN_ID}/latest?t=${Date.now()}`, {
-            headers: { 'X-Master-Key': ADMIN_CONFIG.WRITE_KEY }
-          });
-          if(!res.ok) throw new Error('Failed to fetch');
-          const { record } = await res.json();
-          productData = record.products;
-          renderEditor();
-          status.textContent = '✅ Prices loaded from cloud.';
-          status.style.color = 'var(--success)';
-        } catch(e) {
-          status.textContent = '❌ Error: ' + e.message;
-          status.style.color = 'var(--danger)';
-        }
-      }
-
-      // Render inputs
-      function renderEditor() {
-        const editor = document.getElementById('priceEditor');
-        editor.innerHTML = '';
-        productData.forEach((p, i) => {
-          editor.innerHTML += `
-            <div class="price-row">
-              <span class="label">Product ${i+1}</span>
-              <input type="number" class="p-old" data-i="${i}" value="${p.old}" placeholder="Old Price">
-              <input type="number" class="p-new" data-i="${i}" value="${p.new}" placeholder="New Price">
-              <input type="number" class="p-disc" data-i="${i}" value="${p.discount}" placeholder="Discount %">
+      <div class="navbar">
+        <div class="container">
+          <a href="index.html" class="logo">
+            <div class="logo-icon"><i class="fas fa-heartbeat"></i></div>
+            <div class="logo-text-group">
+              <span class="logo-name">Medi<span>Tech</span></span>
+              <span class="logo-tagline">Medical Furniture</span>
             </div>
-          `;
+          </a>
+          <div style="display:flex; align-items:center; gap:15px;">
+            <button id="logoutBtn" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="admin-container">
+      <div class="admin-card">
+        <div class="admin-header">
+          <h2 class="admin-title">🛠️ Product Price Management</h2>
+          <div>
+            <button id="resetBtn" class="reset-btn"><i class="fas fa-undo"></i> Reset Defaults</button>
+            <button id="updateBtn" class="update-btn"><i class="fas fa-cloud-upload-alt"></i> Update Prices</button>
+          </div>
+        </div>
+        
+        <p style="color:#6c757d; margin-bottom:20px; font-size:14px;">
+          <i class="fas fa-info-circle"></i> Changes are saved to cloud and sync across all devices instantly.
+        </p>
+        
+        <div id="successMsg" class="success-msg">✅ Pricing updated successfully!</div>
+
+        <!-- Product List -->
+        <div id="productsList">
+          <!-- Product 1 -->
+          <div class="product-row">
+            <span class="product-name">Two Function Hospital Bed</span>
+            <input type="number" class="price-input" data-index="0" data-field="new" value="213750" placeholder="New Price"/>
+            <span class="discount-badge" id="discount-0">-25%</span>
+            <input type="hidden" class="old-price" data-index="0" value="285000"/>
+          </div>
+          <!-- Product 2 -->
+          <div class="product-row">
+            <span class="product-name">Single Function Hospital Bed</span>
+            <input type="number" class="price-input" data-index="1" data-field="new" value="149990" placeholder="New Price"/>
+            <span class="discount-badge" id="discount-1">-23%</span>
+            <input type="hidden" class="old-price" data-index="1" value="195000"/>
+          </div>
+          <!-- Product 3 -->
+          <div class="product-row">
+            <span class="product-name">Single Function Commode Bed</span>
+            <input type="number" class="price-input" data-index="2" data-field="new" value="169990" placeholder="New Price"/>
+            <span class="discount-badge" id="discount-2">-23%</span>
+            <input type="hidden" class="old-price" data-index="2" value="220000"/>
+          </div>
+          <!-- Product 4 -->
+          <div class="product-row">
+            <span class="product-name">Basic Wheel Chair</span>
+            <input type="number" class="price-input" data-index="3" data-field="new" value="45500" placeholder="New Price"/>
+            <span class="discount-badge" id="discount-3">-30%</span>
+            <input type="hidden" class="old-price" data-index="3" value="65000"/>
+          </div>
+          <!-- Product 5 -->
+          <div class="product-row">
+            <span class="product-name">Two Function Commode Bed</span>
+            <input type="number" class="price-input" data-index="4" data-field="new" value="256000" placeholder="New Price"/>
+            <span class="discount-badge" id="discount-4">-20%</span>
+            <input type="hidden" class="old-price" data-index="4" value="320000"/>
+          </div>
+          <!-- Product 6 -->
+          <div class="product-row">
+            <span class="product-name">Physiotherapy Bed</span>
+            <input type="number" class="price-input" data-index="5" data-field="new" value="68000" placeholder="New Price"/>
+            <span class="discount-badge" id="discount-5">-20%</span>
+            <input type="hidden" class="old-price" data-index="5" value="85000"/>
+          </div>
+          <!-- Product 7 -->
+          <div class="product-row">
+            <span class="product-name">Examination Bed</span>
+            <input type="number" class="price-input" data-index="6" data-field="new" value="76000" placeholder="New Price"/>
+            <span class="discount-badge" id="discount-6">-20%</span>
+            <input type="hidden" class="old-price" data-index="6" value="95000"/>
+          </div>
+          <!-- Product 8 -->
+          <div class="product-row">
+            <span class="product-name">Blood Collection Chair</span>
+            <input type="number" class="price-input" data-index="7" data-field="new" value="116000" placeholder="New Price"/>
+            <span class="discount-badge" id="discount-7">-20%</span>
+            <input type="hidden" class="old-price" data-index="7" value="145000"/>
+          </div>
+          <!-- Product 9 -->
+          <div class="product-row">
+            <span class="product-name">Commode Wheel Chair</span>
+            <input type="number" class="price-input" data-index="8" data-field="new" value="99990" placeholder="New Price"/>
+            <span class="discount-badge" id="discount-8">-20%</span>
+            <input type="hidden" class="old-price" data-index="8" value="125000"/>
+          </div>
+          <!-- Product 10 -->
+          <div class="product-row">
+            <span class="product-name">Commode Chair (With Wheels)</span>
+            <input type="number" class="price-input" data-index="9" data-field="new" value="35990" placeholder="New Price"/>
+            <span class="discount-badge" id="discount-9">-20%</span>
+            <input type="hidden" class="old-price" data-index="9" value="45000"/>
+          </div>
+          <!-- Product 11 -->
+          <div class="product-row">
+            <span class="product-name">Commode Chair (Without Wheels)</span>
+            <input type="number" class="price-input" data-index="10" data-field="new" value="35990" placeholder="New Price"/>
+            <span class="discount-badge" id="discount-10">-20%</span>
+            <input type="hidden" class="old-price" data-index="10" value="45000"/>
+          </div>
+          <!-- Product 12 -->
+          <div class="product-row">
+            <span class="product-name">Medical Air Mattress</span>
+            <input type="number" class="price-input" data-index="11" data-field="new" value="29750" placeholder="New Price"/>
+            <span class="discount-badge" id="discount-11">-15%</span>
+            <input type="hidden" class="old-price" data-index="11" value="35000"/>
+          </div>
+          <!-- Product 13 -->
+          <div class="product-row">
+            <span class="product-name">Bed Side Locker</span>
+            <input type="number" class="price-input" data-index="12" data-field="new" value="14400" placeholder="New Price"/>
+            <span class="discount-badge" id="discount-12">-20%</span>
+            <input type="hidden" class="old-price" data-index="12" value="18000"/>
+          </div>
+          <!-- Product 14 -->
+          <div class="product-row">
+            <span class="product-name">Bed Side Screen (3-Fold)</span>
+            <input type="number" class="price-input" data-index="13" data-field="new" value="33600" placeholder="New Price"/>
+            <span class="discount-badge" id="discount-13">-20%</span>
+            <input type="hidden" class="old-price" data-index="13" value="42000"/>
+          </div>
+          <!-- Product 15 -->
+          <div class="product-row">
+            <span class="product-name">Bed Side Screen (4-Fold)</span>
+            <input type="number" class="price-input" data-index="14" data-field="new" value="33600" placeholder="New Price"/>
+            <span class="discount-badge" id="discount-14">-20%</span>
+            <input type="hidden" class="old-price" data-index="14" value="42000"/>
+          </div>
+          <!-- Product 16 -->
+          <div class="product-row">
+            <span class="product-name">Hospital Foldable Mattress</span>
+            <input type="number" class="price-input" data-index="15" data-field="new" value="33600" placeholder="New Price"/>
+            <span class="discount-badge" id="discount-15">-20%</span>
+            <input type="hidden" class="old-price" data-index="15" value="42000"/>
+          </div>
+          <!-- Product 17 -->
+          <div class="product-row">
+            <span class="product-name">Over Bed Table</span>
+            <input type="number" class="price-input" data-index="16" data-field="new" value="17600" placeholder="New Price"/>
+            <span class="discount-badge" id="discount-16">-20%</span>
+            <input type="hidden" class="old-price" data-index="16" value="22000"/>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK + Config -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBa7TbDQDQzDnOhZD5xp-iakhyHgxoG3EY",
+      authDomain: "meditechh-3feb0.firebaseapp.com",
+      databaseURL: "https://meditechh-3feb0-default-rtdb.firebaseio.com",
+      projectId: "meditechh-3feb0",
+      storageBucket: "meditechh-3feb0.firebasestorage.app",
+      messagingSenderId: "698299080912",
+      appId: "1:698299080912:web:ba005d3408910a547f3ed5",
+      measurementId: "G-PHQSH59MEZ"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+  </script>
+
+  <!-- Admin Logic -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // ===== LOGIN SYSTEM =====
+      const loginScreen = document.getElementById('loginScreen');
+      const adminPanel = document.getElementById('adminPanel');
+      const adminPassword = document.getElementById('adminPassword');
+      const loginBtn = document.getElementById('loginBtn');
+      const loginError = document.getElementById('loginError');
+      const logoutBtn = document.getElementById('logoutBtn');
+
+      // Simple password check (for demo - secure this server-side in production)
+      const ADMIN_PASS = 'dila123'; // ⚠️ Change this or add Firebase Auth later
+
+      loginBtn.addEventListener('click', function() {
+        if (adminPassword.value === ADMIN_PASS) {
+          loginScreen.style.display = 'none';
+          adminPanel.style.display = 'block';
+          loadPricesFromFirebase(); // Load latest prices on login
+        } else {
+          loginError.style.display = 'block';
+          setTimeout(() => loginError.style.display = 'none', 3000);
+        }
+      });
+
+      logoutBtn.addEventListener('click', function() {
+        adminPanel.style.display = 'none';
+        loginScreen.style.display = 'block';
+        adminPassword.value = '';
+      });
+
+      // ===== PRICE MANAGEMENT =====
+      const updateBtn = document.getElementById('updateBtn');
+      const resetBtn = document.getElementById('resetBtn');
+      const successMsg = document.getElementById('successMsg');
+      const priceInputs = document.querySelectorAll('.price-input');
+      const oldPrices = document.querySelectorAll('.old-price');
+      const discountBadges = document.querySelectorAll('.discount-badge');
+
+      // Default products array (matches your index.html order)
+      const defaultProducts = [
+        { old: 285000, new: 213750, discount: 25 },
+        { old: 195000, new: 149990, discount: 23 },
+        { old: 220000, new: 169990, discount: 23 },
+        { old: 65000, new: 45500, discount: 30 },
+        { old: 320000, new: 256000, discount: 20 },
+        { old: 85000, new: 68000, discount: 20 },
+        { old: 95000, new: 76000, discount: 20 },
+        { old: 145000, new: 116000, discount: 20 },
+        { old: 125000, new: 99990, discount: 20 },
+        { old: 45000, new: 35990, discount: 20 },
+        { old: 45000, new: 35990, discount: 20 },
+        { old: 35000, new: 29750, discount: 15 },
+        { old: 18000, new: 14400, discount: 20 },
+        { old: 42000, new: 33600, discount: 20 },
+        { old: 42000, new: 33600, discount: 20 },
+        { old: 42000, new: 33600, discount: 20 },
+        { old: 22000, new: 17600, discount: 20 }
+      ];
+
+      // Calculate and update discount badges
+      function updateDiscounts() {
+        priceInputs.forEach(input => {
+          const index = input.dataset.index;
+          const newPrice = parseInt(input.value) || 0;
+          const oldPrice = parseInt(oldPrices[index].value) || 0;
+          if (oldPrice > 0 && newPrice > 0) {
+            const discount = Math.round((1 - newPrice / oldPrice) * 100);
+            discountBadges[index].textContent = `-${discount}%`;
+          }
         });
       }
 
-      // Save to cloud
-      async function saveToCloud() {
-        const btn = document.getElementById('saveBtn');
-        const status = document.getElementById('status');
-        btn.disabled = true;
-        btn.textContent = '⏳ Saving...';
-        status.textContent = '';
+      // Listen for price changes to update discount badges live
+      priceInputs.forEach(input => {
+        input.addEventListener('input', updateDiscounts);
+      });
 
-        // Collect updated values
-        document.querySelectorAll('.p-old').forEach(el => productData[el.dataset.i].old = Number(el.value));
-        document.querySelectorAll('.p-new').forEach(el => productData[el.dataset.i].new = Number(el.value));
-        document.querySelectorAll('.p-disc').forEach(el => productData[el.dataset.i].discount = Number(el.value));
-
-        try {
-          await fetch(`https://api.jsonbin.io/v3/b/${ADMIN_CONFIG.BIN_ID}`, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-              'X-Master-Key': ADMIN_CONFIG.WRITE_KEY
-            },
-            body: JSON.stringify({ products: productData })
-          });
-          status.textContent = '✅ Pricing updated successfully! All devices will sync shortly.';
-          status.style.color = 'var(--success)';
-        } catch(e) {
-          status.textContent = '❌ Save failed. Check console & API Keys.';
-          status.style.color = 'var(--danger)';
-        } finally {
-          btn.disabled = false;
-          btn.textContent = '💾 Save All Prices to Cloud';
-        }
+      // Load prices from Firebase
+      function loadPricesFromFirebase() {
+        db.ref('meditech_products').once('value')
+          .then(snapshot => {
+            const data = snapshot.val();
+            if (data) {
+              data.forEach((product, index) => {
+                const input = document.querySelector(`.price-input[data-index="${index}"]`);
+                const badge = document.getElementById(`discount-${index}`);
+                if (input && product.new) {
+                  input.value = product.new;
+                }
+                if (badge && product.discount !== undefined) {
+                  badge.textContent = `-${product.discount}%`;
+                }
+              });
+            }
+          })
+          .catch(err => console.error('Load error:', err));
       }
 
-      // Enter key to login
-      document.getElementById('adminPass').addEventListener('keypress', e => {
-        if(e.key === 'Enter') checkLogin();
-      });
-    </script>
+      // Save prices to Firebase
+      function savePricesToFirebase() {
+        updateBtn.disabled = true;
+        updateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Syncing...';
+
+        const productsArray = [];
+        priceInputs.forEach(input => {
+          const index = input.dataset.index;
+          const newPrice = parseInt(input.value) || 0;
+          const oldPrice = parseInt(oldPrices[index].value) || 0;
+          const discount = oldPrice > 0 && newPrice > 0 
+            ? Math.round((1 - newPrice / oldPrice) * 100) 
+            : 0;
+          productsArray.push({ old: oldPrice, new: newPrice, discount: discount });
+        });
+
+        db.ref('meditech_products').set(productsArray)
+          .then(() => {
+            successMsg.style.display = 'block';
+            setTimeout(() => successMsg.style.display = 'none', 3000);
+          })
+          .catch(err => {
+            alert('❌ Error: ' + err.message);
+            console.error(err);
+          })
+          .finally(() => {
+            updateBtn.disabled = false;
+            updateBtn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Update Prices';
+          });
+      }
+
+      // Reset to defaults
+      function resetPrices() {
+        if (!confirm('Reset all prices to default values?')) return;
+        
+        defaultProducts.forEach((product, index) => {
+          const input = document.querySelector(`.price-input[data-index="${index}"]`);
+          const badge = document.getElementById(`discount-${index}`);
+          if (input) input.value = product.new;
+          if (badge) badge.textContent = `-${product.discount}%`;
+        });
+        updateDiscounts();
+        savePricesToFirebase();
+      }
+
+      // Event listeners
+      updateBtn.addEventListener('click', savePricesToFirebase);
+      resetBtn.addEventListener('click', resetPrices);
+
+      // Auto-save on input change (optional - remove if you prefer manual save)
+      // priceInputs.forEach(input => {
+      //   input.addEventListener('change', savePricesToFirebase);
+      // });
+    });
+  </script>
 </body>
 </html>
