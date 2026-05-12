@@ -378,7 +378,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // ☁️ CLOUD PRICE SYNC (Works on ALL pages safely)
     // ============================================
     const CLOUD_CONFIG = {
-        READ_KEY: '$2a$10$BTcNAK7zgrXjnj0AIOoZnepXR0qgDUdrCH1KpSAqT/SJTYWHKvqga', // 🔑 Replace with JSONbin Read Key
+        READ_KEY: '$2a$10$7/bncqTj/hDER9iTTrR1aeAXGtgxzVVHZWs78ZhZzyeVbfUnCuO5S', // 🔑 Replace with JSONbin Read Key
   BIN_ID: '6a032124c0954111d810f38b'         // 📦 Replace with your JSONbin Bin ID
     };
 
