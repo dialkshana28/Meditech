@@ -8,18 +8,19 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <style>
     /* Admin-specific styles - kept minimal & non-intrusive */
-    .admin-container { max-width: 900px; margin: 100px auto 40px; padding: 0 20px; }
+    .admin-container { max-width: 1000px; margin: 100px auto 40px; padding: 0 20px; }
     .admin-card { background: #fff; border-radius: 16px; padding: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); margin-bottom: 25px; }
     .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
     .admin-title { font-size: 24px; font-weight: 700; color: #1B1B2F; }
     .logout-btn { background: #e74c3c; color: #fff; border: none; padding: 10px 20px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: 0.3s; }
     .logout-btn:hover { background: #c0392b; transform: translateY(-2px); }
-    .product-row { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 15px; align-items: center; padding: 15px 0; border-bottom: 1px solid #f1f1f1; }
+    .product-row { display: grid; grid-template-columns: 1.2fr 1fr 1fr auto; gap: 15px; align-items: center; padding: 15px 0; border-bottom: 1px solid #f1f1f1; }
     .product-row:last-child { border-bottom: none; }
-    .product-name { font-weight: 600; color: #1B1B2F; }
+    .product-name { font-weight: 600; color: #1B1B2F; font-size: 14px; }
     .price-input { width: 100%; padding: 10px 14px; border: 2px solid #e9ecef; border-radius: 10px; font-size: 15px; transition: 0.3s; }
     .price-input:focus { outline: none; border-color: #E63946; box-shadow: 0 0 0 4px rgba(230,57,70,0.1); }
-    .discount-badge { background: rgba(231,76,60,0.1); color: #e74c3c; padding: 5px 12px; border-radius: 8px; font-weight: 700; font-size: 13px; }
+    .old-price-input { background: #f8f9fa; } /* Visual cue for old price */
+    .discount-badge { background: rgba(231,76,60,0.1); color: #e74c3c; padding: 5px 12px; border-radius: 8px; font-weight: 700; font-size: 13px; min-width: 45px; text-align: center; }
     .update-btn { background: linear-gradient(135deg, #E63946, #FF6B6B); color: #fff; border: none; padding: 12px 28px; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 8px; }
     .update-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(230,57,70,0.4); }
     .update-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
@@ -33,9 +34,11 @@
     .error-msg { color: #e74c3c; font-size: 14px; margin-top: 10px; display: none; }
     .reset-btn { background: #6c757d; color: #fff; border: none; padding: 10px 20px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: 0.3s; margin-left: 10px; }
     .reset-btn:hover { background: #5a6268; }
+    .col-labels { display: grid; grid-template-columns: 1.2fr 1fr 1fr auto; gap: 15px; padding: 0 0 10px 0; border-bottom: 1px solid #e9ecef; margin-bottom: 5px; font-size: 12px; color: #6c757d; font-weight: 600; text-transform: uppercase; }
     @media (max-width: 768px) {
-      .product-row { grid-template-columns: 1fr; gap: 10px; text-align: center; }
+      .col-labels, .product-row { grid-template-columns: 1fr; gap: 8px; text-align: center; }
       .admin-header { flex-direction: column; gap: 15px; text-align: center; }
+      .discount-badge { width: fit-content; margin: 0 auto; }
     }
   </style>
 </head>
@@ -91,131 +94,122 @@
         </div>
         
         <p style="color:#6c757d; margin-bottom:20px; font-size:14px;">
-          <i class="fas fa-info-circle"></i> Changes are saved to cloud and sync across all devices instantly.
+          <i class="fas fa-info-circle"></i> Changes sync instantly across all devices via Firebase Cloud.
         </p>
         
         <div id="successMsg" class="success-msg">✅ Pricing updated successfully!</div>
 
+        <!-- Column Labels -->
+        <div class="col-labels">
+          <span>Product Name</span>
+          <span>Old Price (Rs.)</span>
+          <span>New Price (Rs.)</span>
+          <span>Discount</span>
+        </div>
+
         <!-- Product List -->
         <div id="productsList">
-          <!-- Product 1 -->
           <div class="product-row">
             <span class="product-name">Two Function Hospital Bed</span>
-            <input type="number" class="price-input" data-index="0" data-field="new" value="213750" placeholder="New Price"/>
-            <span class="discount-badge" id="discount-0">-25%</span>
-            <input type="hidden" class="old-price" data-index="0" value="285000"/>
+            <input type="number" class="price-input old-price-input" value="285000" placeholder="Old Price"/>
+            <input type="number" class="price-input new-price-input" value="213750" placeholder="New Price"/>
+            <span class="discount-badge">-25%</span>
           </div>
-          <!-- Product 2 -->
           <div class="product-row">
             <span class="product-name">Single Function Hospital Bed</span>
-            <input type="number" class="price-input" data-index="1" data-field="new" value="149990" placeholder="New Price"/>
-            <span class="discount-badge" id="discount-1">-23%</span>
-            <input type="hidden" class="old-price" data-index="1" value="195000"/>
+            <input type="number" class="price-input old-price-input" value="195000" placeholder="Old Price"/>
+            <input type="number" class="price-input new-price-input" value="149990" placeholder="New Price"/>
+            <span class="discount-badge">-23%</span>
           </div>
-          <!-- Product 3 -->
           <div class="product-row">
             <span class="product-name">Single Function Commode Bed</span>
-            <input type="number" class="price-input" data-index="2" data-field="new" value="169990" placeholder="New Price"/>
-            <span class="discount-badge" id="discount-2">-23%</span>
-            <input type="hidden" class="old-price" data-index="2" value="220000"/>
+            <input type="number" class="price-input old-price-input" value="220000" placeholder="Old Price"/>
+            <input type="number" class="price-input new-price-input" value="169990" placeholder="New Price"/>
+            <span class="discount-badge">-23%</span>
           </div>
-          <!-- Product 4 -->
           <div class="product-row">
             <span class="product-name">Basic Wheel Chair</span>
-            <input type="number" class="price-input" data-index="3" data-field="new" value="45500" placeholder="New Price"/>
-            <span class="discount-badge" id="discount-3">-30%</span>
-            <input type="hidden" class="old-price" data-index="3" value="65000"/>
+            <input type="number" class="price-input old-price-input" value="65000" placeholder="Old Price"/>
+            <input type="number" class="price-input new-price-input" value="45500" placeholder="New Price"/>
+            <span class="discount-badge">-30%</span>
           </div>
-          <!-- Product 5 -->
           <div class="product-row">
             <span class="product-name">Two Function Commode Bed</span>
-            <input type="number" class="price-input" data-index="4" data-field="new" value="256000" placeholder="New Price"/>
-            <span class="discount-badge" id="discount-4">-20%</span>
-            <input type="hidden" class="old-price" data-index="4" value="320000"/>
+            <input type="number" class="price-input old-price-input" value="320000" placeholder="Old Price"/>
+            <input type="number" class="price-input new-price-input" value="256000" placeholder="New Price"/>
+            <span class="discount-badge">-20%</span>
           </div>
-          <!-- Product 6 -->
           <div class="product-row">
             <span class="product-name">Physiotherapy Bed</span>
-            <input type="number" class="price-input" data-index="5" data-field="new" value="68000" placeholder="New Price"/>
-            <span class="discount-badge" id="discount-5">-20%</span>
-            <input type="hidden" class="old-price" data-index="5" value="85000"/>
+            <input type="number" class="price-input old-price-input" value="85000" placeholder="Old Price"/>
+            <input type="number" class="price-input new-price-input" value="68000" placeholder="New Price"/>
+            <span class="discount-badge">-20%</span>
           </div>
-          <!-- Product 7 -->
           <div class="product-row">
             <span class="product-name">Examination Bed</span>
-            <input type="number" class="price-input" data-index="6" data-field="new" value="76000" placeholder="New Price"/>
-            <span class="discount-badge" id="discount-6">-20%</span>
-            <input type="hidden" class="old-price" data-index="6" value="95000"/>
+            <input type="number" class="price-input old-price-input" value="95000" placeholder="Old Price"/>
+            <input type="number" class="price-input new-price-input" value="76000" placeholder="New Price"/>
+            <span class="discount-badge">-20%</span>
           </div>
-          <!-- Product 8 -->
           <div class="product-row">
             <span class="product-name">Blood Collection Chair</span>
-            <input type="number" class="price-input" data-index="7" data-field="new" value="116000" placeholder="New Price"/>
-            <span class="discount-badge" id="discount-7">-20%</span>
-            <input type="hidden" class="old-price" data-index="7" value="145000"/>
+            <input type="number" class="price-input old-price-input" value="145000" placeholder="Old Price"/>
+            <input type="number" class="price-input new-price-input" value="116000" placeholder="New Price"/>
+            <span class="discount-badge">-20%</span>
           </div>
-          <!-- Product 9 -->
           <div class="product-row">
             <span class="product-name">Commode Wheel Chair</span>
-            <input type="number" class="price-input" data-index="8" data-field="new" value="99990" placeholder="New Price"/>
-            <span class="discount-badge" id="discount-8">-20%</span>
-            <input type="hidden" class="old-price" data-index="8" value="125000"/>
+            <input type="number" class="price-input old-price-input" value="125000" placeholder="Old Price"/>
+            <input type="number" class="price-input new-price-input" value="99990" placeholder="New Price"/>
+            <span class="discount-badge">-20%</span>
           </div>
-          <!-- Product 10 -->
           <div class="product-row">
             <span class="product-name">Commode Chair (With Wheels)</span>
-            <input type="number" class="price-input" data-index="9" data-field="new" value="35990" placeholder="New Price"/>
-            <span class="discount-badge" id="discount-9">-20%</span>
-            <input type="hidden" class="old-price" data-index="9" value="45000"/>
+            <input type="number" class="price-input old-price-input" value="45000" placeholder="Old Price"/>
+            <input type="number" class="price-input new-price-input" value="35990" placeholder="New Price"/>
+            <span class="discount-badge">-20%</span>
           </div>
-          <!-- Product 11 -->
           <div class="product-row">
             <span class="product-name">Commode Chair (Without Wheels)</span>
-            <input type="number" class="price-input" data-index="10" data-field="new" value="35990" placeholder="New Price"/>
-            <span class="discount-badge" id="discount-10">-20%</span>
-            <input type="hidden" class="old-price" data-index="10" value="45000"/>
+            <input type="number" class="price-input old-price-input" value="45000" placeholder="Old Price"/>
+            <input type="number" class="price-input new-price-input" value="35990" placeholder="New Price"/>
+            <span class="discount-badge">-20%</span>
           </div>
-          <!-- Product 12 -->
           <div class="product-row">
             <span class="product-name">Medical Air Mattress</span>
-            <input type="number" class="price-input" data-index="11" data-field="new" value="29750" placeholder="New Price"/>
-            <span class="discount-badge" id="discount-11">-15%</span>
-            <input type="hidden" class="old-price" data-index="11" value="35000"/>
+            <input type="number" class="price-input old-price-input" value="35000" placeholder="Old Price"/>
+            <input type="number" class="price-input new-price-input" value="29750" placeholder="New Price"/>
+            <span class="discount-badge">-15%</span>
           </div>
-          <!-- Product 13 -->
           <div class="product-row">
             <span class="product-name">Bed Side Locker</span>
-            <input type="number" class="price-input" data-index="12" data-field="new" value="14400" placeholder="New Price"/>
-            <span class="discount-badge" id="discount-12">-20%</span>
-            <input type="hidden" class="old-price" data-index="12" value="18000"/>
+            <input type="number" class="price-input old-price-input" value="18000" placeholder="Old Price"/>
+            <input type="number" class="price-input new-price-input" value="14400" placeholder="New Price"/>
+            <span class="discount-badge">-20%</span>
           </div>
-          <!-- Product 14 -->
           <div class="product-row">
             <span class="product-name">Bed Side Screen (3-Fold)</span>
-            <input type="number" class="price-input" data-index="13" data-field="new" value="33600" placeholder="New Price"/>
-            <span class="discount-badge" id="discount-13">-20%</span>
-            <input type="hidden" class="old-price" data-index="13" value="42000"/>
+            <input type="number" class="price-input old-price-input" value="42000" placeholder="Old Price"/>
+            <input type="number" class="price-input new-price-input" value="33600" placeholder="New Price"/>
+            <span class="discount-badge">-20%</span>
           </div>
-          <!-- Product 15 -->
           <div class="product-row">
             <span class="product-name">Bed Side Screen (4-Fold)</span>
-            <input type="number" class="price-input" data-index="14" data-field="new" value="33600" placeholder="New Price"/>
-            <span class="discount-badge" id="discount-14">-20%</span>
-            <input type="hidden" class="old-price" data-index="14" value="42000"/>
+            <input type="number" class="price-input old-price-input" value="42000" placeholder="Old Price"/>
+            <input type="number" class="price-input new-price-input" value="33600" placeholder="New Price"/>
+            <span class="discount-badge">-20%</span>
           </div>
-          <!-- Product 16 -->
           <div class="product-row">
             <span class="product-name">Hospital Foldable Mattress</span>
-            <input type="number" class="price-input" data-index="15" data-field="new" value="33600" placeholder="New Price"/>
-            <span class="discount-badge" id="discount-15">-20%</span>
-            <input type="hidden" class="old-price" data-index="15" value="42000"/>
+            <input type="number" class="price-input old-price-input" value="42000" placeholder="Old Price"/>
+            <input type="number" class="price-input new-price-input" value="33600" placeholder="New Price"/>
+            <span class="discount-badge">-20%</span>
           </div>
-          <!-- Product 17 -->
           <div class="product-row">
             <span class="product-name">Over Bed Table</span>
-            <input type="number" class="price-input" data-index="16" data-field="new" value="17600" placeholder="New Price"/>
-            <span class="discount-badge" id="discount-16">-20%</span>
-            <input type="hidden" class="old-price" data-index="16" value="22000"/>
+            <input type="number" class="price-input old-price-input" value="22000" placeholder="Old Price"/>
+            <input type="number" class="price-input new-price-input" value="17600" placeholder="New Price"/>
+            <span class="discount-badge">-20%</span>
           </div>
         </div>
       </div>
@@ -251,14 +245,13 @@
       const loginError = document.getElementById('loginError');
       const logoutBtn = document.getElementById('logoutBtn');
 
-      // Simple password check (for demo - secure this server-side in production)
-      const ADMIN_PASS = 'mediadmin'; // ⚠️ Change this or add Firebase Auth later
+      const ADMIN_PASS = 'dila123'; // Change for production
 
       loginBtn.addEventListener('click', function() {
         if (adminPassword.value === ADMIN_PASS) {
           loginScreen.style.display = 'none';
           adminPanel.style.display = 'block';
-          loadPricesFromFirebase(); // Load latest prices on login
+          loadPricesFromFirebase();
         } else {
           loginError.style.display = 'block';
           setTimeout(() => loginError.style.display = 'none', 3000);
@@ -275,47 +268,39 @@
       const updateBtn = document.getElementById('updateBtn');
       const resetBtn = document.getElementById('resetBtn');
       const successMsg = document.getElementById('successMsg');
-      const priceInputs = document.querySelectorAll('.price-input');
-      const oldPrices = document.querySelectorAll('.old-price');
-      const discountBadges = document.querySelectorAll('.discount-badge');
+      const productRows = document.querySelectorAll('.product-row');
 
-      // Default products array (matches your index.html order)
       const defaultProducts = [
-        { old: 285000, new: 213750, discount: 25 },
-        { old: 195000, new: 149990, discount: 23 },
-        { old: 220000, new: 169990, discount: 23 },
-        { old: 65000, new: 45500, discount: 30 },
-        { old: 320000, new: 256000, discount: 20 },
-        { old: 85000, new: 68000, discount: 20 },
-        { old: 95000, new: 76000, discount: 20 },
-        { old: 145000, new: 116000, discount: 20 },
-        { old: 125000, new: 99990, discount: 20 },
-        { old: 45000, new: 35990, discount: 20 },
-        { old: 45000, new: 35990, discount: 20 },
-        { old: 35000, new: 29750, discount: 15 },
-        { old: 18000, new: 14400, discount: 20 },
-        { old: 42000, new: 33600, discount: 20 },
-        { old: 42000, new: 33600, discount: 20 },
-        { old: 42000, new: 33600, discount: 20 },
-        { old: 22000, new: 17600, discount: 20 }
+        { old: 285000, new: 213750 }, { old: 195000, new: 149990 }, { old: 220000, new: 169990 },
+        { old: 65000, new: 45500 }, { old: 320000, new: 256000 }, { old: 85000, new: 68000 },
+        { old: 95000, new: 76000 }, { old: 145000, new: 116000 }, { old: 125000, new: 99990 },
+        { old: 45000, new: 35990 }, { old: 45000, new: 35990 }, { old: 35000, new: 29750 },
+        { old: 18000, new: 14400 }, { old: 42000, new: 33600 }, { old: 42000, new: 33600 },
+        { old: 42000, new: 33600 }, { old: 22000, new: 17600 }
       ];
 
-      // Calculate and update discount badges
+      // Calculate & update discount badges live
       function updateDiscounts() {
-        priceInputs.forEach(input => {
-          const index = input.dataset.index;
-          const newPrice = parseInt(input.value) || 0;
-          const oldPrice = parseInt(oldPrices[index].value) || 0;
-          if (oldPrice > 0 && newPrice > 0) {
+        productRows.forEach(row => {
+          const oldInput = row.querySelector('.old-price-input');
+          const newInput = row.querySelector('.new-price-input');
+          const badge = row.querySelector('.discount-badge');
+          const oldPrice = parseInt(oldInput.value) || 0;
+          const newPrice = parseInt(newInput.value) || 0;
+          
+          if (oldPrice > 0 && newPrice > 0 && newPrice <= oldPrice) {
             const discount = Math.round((1 - newPrice / oldPrice) * 100);
-            discountBadges[index].textContent = `-${discount}%`;
+            badge.textContent = `-${discount}%`;
+          } else {
+            badge.textContent = '0%';
           }
         });
       }
 
-      // Listen for price changes to update discount badges live
-      priceInputs.forEach(input => {
-        input.addEventListener('input', updateDiscounts);
+      productRows.forEach(row => {
+        row.querySelectorAll('.price-input').forEach(input => {
+          input.addEventListener('input', updateDiscounts);
+        });
       });
 
       // Load prices from Firebase
@@ -324,16 +309,17 @@
           .then(snapshot => {
             const data = snapshot.val();
             if (data) {
-              data.forEach((product, index) => {
-                const input = document.querySelector(`.price-input[data-index="${index}"]`);
-                const badge = document.getElementById(`discount-${index}`);
-                if (input && product.new) {
-                  input.value = product.new;
-                }
-                if (badge && product.discount !== undefined) {
-                  badge.textContent = `-${product.discount}%`;
+              productRows.forEach((row, index) => {
+                if (data[index]) {
+                  const oldInput = row.querySelector('.old-price-input');
+                  const newInput = row.querySelector('.new-price-input');
+                  const badge = row.querySelector('.discount-badge');
+                  if (oldInput && data[index].old) oldInput.value = data[index].old;
+                  if (newInput && data[index].new) newInput.value = data[index].new;
+                  if (badge && data[index].discount !== undefined) badge.textContent = `-${data[index].discount}%`;
                 }
               });
+              updateDiscounts();
             }
           })
           .catch(err => console.error('Load error:', err));
@@ -345,13 +331,13 @@
         updateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Syncing...';
 
         const productsArray = [];
-        priceInputs.forEach(input => {
-          const index = input.dataset.index;
-          const newPrice = parseInt(input.value) || 0;
-          const oldPrice = parseInt(oldPrices[index].value) || 0;
-          const discount = oldPrice > 0 && newPrice > 0 
-            ? Math.round((1 - newPrice / oldPrice) * 100) 
-            : 0;
+        productRows.forEach(row => {
+          const oldPrice = parseInt(row.querySelector('.old-price-input').value) || 0;
+          const newPrice = parseInt(row.querySelector('.new-price-input').value) || 0;
+          let discount = 0;
+          if (oldPrice > 0 && newPrice > 0 && newPrice <= oldPrice) {
+            discount = Math.round((1 - newPrice / oldPrice) * 100);
+          }
           productsArray.push({ old: oldPrice, new: newPrice, discount: discount });
         });
 
@@ -373,25 +359,18 @@
       // Reset to defaults
       function resetPrices() {
         if (!confirm('Reset all prices to default values?')) return;
-        
-        defaultProducts.forEach((product, index) => {
-          const input = document.querySelector(`.price-input[data-index="${index}"]`);
-          const badge = document.getElementById(`discount-${index}`);
-          if (input) input.value = product.new;
-          if (badge) badge.textContent = `-${product.discount}%`;
+        productRows.forEach((row, index) => {
+          if (defaultProducts[index]) {
+            row.querySelector('.old-price-input').value = defaultProducts[index].old;
+            row.querySelector('.new-price-input').value = defaultProducts[index].new;
+          }
         });
         updateDiscounts();
         savePricesToFirebase();
       }
 
-      // Event listeners
       updateBtn.addEventListener('click', savePricesToFirebase);
       resetBtn.addEventListener('click', resetPrices);
-
-      // Auto-save on input change (optional - remove if you prefer manual save)
-      // priceInputs.forEach(input => {
-      //   input.addEventListener('change', savePricesToFirebase);
-      // });
     });
   </script>
 </body>
