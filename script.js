@@ -1,5 +1,5 @@
 // ============================================
-// MEDITECH - Complete JavaScript - FIXED
+// MEDITECH - Complete JavaScript (CLEAN & FIXED)
 // ============================================
 document.addEventListener('DOMContentLoaded', function() {
 
@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const preloader = document.getElementById('preloader');
     window.addEventListener('load', () => {
         setTimeout(() => {
-            preloader.classList.add('hidden');
+            if (preloader) preloader.classList.add('hidden');
         }, 800);
     });
 
@@ -16,15 +16,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const scrollTop = document.getElementById('scrollTop');
 
     window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-            header.classList.add('scrolled');
-        } else {
-            header.classList.remove('scrolled');
+        if (header) {
+            if (window.scrollY > 50) header.classList.add('scrolled');
+            else header.classList.remove('scrolled');
         }
-        if (window.scrollY > 500) {
-            scrollTop.classList.add('active');
-        } else {
-            scrollTop.classList.remove('active');
+        if (scrollTop) {
+            if (window.scrollY > 500) scrollTop.classList.add('active');
+            else scrollTop.classList.remove('active');
         }
     });
 
@@ -34,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // ===== HAMBURGER MENU - FIXED =====
+    // ===== HAMBURGER MENU =====
     const hamburger = document.getElementById('hamburger');
     const navMenu = document.getElementById('navMenu');
     const mobileOverlay = document.getElementById('mobileOverlay');
@@ -43,15 +41,13 @@ document.addEventListener('DOMContentLoaded', function() {
         if (hamburger) hamburger.classList.toggle('active');
         if (navMenu) navMenu.classList.toggle('active');
         if (mobileOverlay) mobileOverlay.classList.toggle('active');
-        document.body.style.overflow = (navMenu && navMenu.classList.contains('active')) ? 'hidden' : '';
+        if (navMenu) {
+            document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
+        }
     }
 
-    if (hamburger) {
-        hamburger.addEventListener('click', toggleMenu);
-    }
-    if (mobileOverlay) {
-        mobileOverlay.addEventListener('click', toggleMenu);
-    }
+    if (hamburger) hamburger.addEventListener('click', toggleMenu);
+    if (mobileOverlay) mobileOverlay.addEventListener('click', toggleMenu);
     if (navMenu) {
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', () => {
@@ -81,16 +77,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const chatSend = document.getElementById('chatSend');
     const chatMessages = document.getElementById('chatMessages');
 
-    if (chatbotToggle) {
-        chatbotToggle.addEventListener('click', () => {
-            if (chatbotWindow) chatbotWindow.classList.toggle('active');
-        });
-    }
-    if (chatbotClose) {
-        chatbotClose.addEventListener('click', () => {
-            if (chatbotWindow) chatbotWindow.classList.remove('active');
-        });
-    }
+    if (chatbotToggle) chatbotToggle.addEventListener('click', () => {
+        if (chatbotWindow) chatbotWindow.classList.toggle('active');
+    });
+    if (chatbotClose) chatbotClose.addEventListener('click', () => {
+        if (chatbotWindow) chatbotWindow.classList.remove('active');
+    });
 
     const botResponses = {
         'price': '💰 Prices range from Rs. 53,300 to Rs. 416,000. Check Products page for discounts!',
@@ -144,7 +136,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const details = card.querySelector('.product-details');
             const icon = this.querySelector('i');
             const textSpan = this.querySelector('span');
-            
+
             if (details && details.classList.contains('active')) {
                 details.classList.remove('active');
                 details.style.maxHeight = '0';
@@ -152,7 +144,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (textSpan) textSpan.textContent = 'View Details';
                 this.classList.remove('active');
             } else if (details) {
-                // Close all other open details
                 document.querySelectorAll('.product-details.active').forEach(openDetails => {
                     openDetails.classList.remove('active');
                     openDetails.style.maxHeight = '0';
@@ -165,14 +156,13 @@ document.addEventListener('DOMContentLoaded', function() {
                         otherBtn.classList.remove('active');
                     }
                 });
-                
-                // Open this one
+
                 details.classList.add('active');
                 details.style.maxHeight = details.scrollHeight + 'px';
                 if (icon) icon.style.transform = 'rotate(180deg)';
                 if (textSpan) textSpan.textContent = 'Hide Details';
                 this.classList.add('active');
-                
+
                 setTimeout(() => {
                     details.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                 }, 300);
@@ -185,7 +175,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const phone = '94768815222';
         let message = '';
         if (type === 'share') {
-            message = `🔗 *Check out this product from MediTech:*\n\n*${productName}*\n\n🏥 MediTech Medical Furniture\n📍 325, Singhapura, Hokandara\n📞 076-942-3681\n💬 WhatsApp: 076-881-5222`;
+            message = `🔗 *Check out this product from MediTech:* \n\n*${productName}*\n\n🏥 MediTech Medical Furniture\n📍 325, Singhapura, Hokandara\n📞 076-942-3681\n💬 WhatsApp: 076-881-5222`;
         } else {
             message = `👋 Hi MediTech! I'm interested in:\n\n*${productName}*\n\nCould you please share more details, pricing, and availability? Thank you!`;
         }
@@ -200,7 +190,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // ===== SHARE MODAL FUNCTIONS =====
     let currentProductName = '';
-    
+
     function openShareModal(productName) {
         currentProductName = productName;
         const modal = document.getElementById('shareModal');
@@ -248,7 +238,7 @@ document.addEventListener('DOMContentLoaded', function() {
             fallbackCopy(url);
         }
     }
-    
+
     function fallbackCopy(text) {
         const textArea = document.createElement('textarea');
         textArea.value = text;
@@ -265,7 +255,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     window.copyToClipboard = copyToClipboard;
 
-    // Close modal when clicking outside
     const shareModal = document.getElementById('shareModal');
     if (shareModal) {
         shareModal.addEventListener('click', function(e) {
@@ -278,27 +267,19 @@ document.addEventListener('DOMContentLoaded', function() {
         btn.addEventListener('click', function() {
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             this.classList.add('active');
-            
+
             const filter = this.getAttribute('data-filter');
             const products = document.querySelectorAll('.product-card');
             const sections = document.querySelectorAll('.category-section');
-            
+
             if (filter === 'all') {
-                products.forEach(product => {
-                    product.classList.remove('filtered');
-                    product.style.display = '';
-                });
+                products.forEach(product => { product.classList.remove('filtered'); product.style.display = ''; });
                 sections.forEach(section => { section.style.display = ''; });
             } else {
                 products.forEach(product => {
                     const category = product.getAttribute('data-category');
-                    if (category === filter) {
-                        product.classList.remove('filtered');
-                        product.style.display = '';
-                    } else {
-                        product.classList.add('filtered');
-                        product.style.display = 'none';
-                    }
+                    if (category === filter) { product.classList.remove('filtered'); product.style.display = ''; }
+                    else { product.classList.add('filtered'); product.style.display = 'none'; }
                 });
                 sections.forEach(section => {
                     const sectionCategory = section.getAttribute('data-category');
@@ -306,9 +287,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             }
             const productsSection = document.querySelector('.products-section');
-            if (productsSection) {
-                productsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
+            if (productsSection) productsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
     });
 
@@ -395,16 +374,46 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-});
+    // ============================================
+    // ☁️ CLOUD PRICE SYNC (Works on ALL pages safely)
+    // ============================================
+    const CLOUD_CONFIG = {
+        READ_KEY: '$2a$10$BTcNAK7zgrXjnj0AIOoZnepXR0qgDUdrCH1KpSAqT/SJTYWHKvqga', // 🔑 Replace with JSONbin Read Key
+  BIN_ID: '6a032124c0954111d810f38b'         // 📦 Replace with your JSONbin Bin ID
+    };
 
-// Load updated prices from admin panel (optional)
-if(localStorage.getItem('meditech_products')) {
-  const saved = JSON.parse(localStorage.getItem('meditech_products'));
-  document.querySelectorAll('.product-card').forEach((card, i) => {
-    if(saved[i]) {
-      card.querySelector('.price-old').textContent = 'Rs. ' + saved[i].old.toLocaleString();
-      card.querySelector('.price-new').textContent = 'Rs. ' + saved[i].new.toLocaleString();
-      card.querySelector('.discount-tag').textContent = '-' + saved[i].discount + '%';
+    async function syncPricesFromCloud() {
+        // Only run if product cards actually exist on this page
+        const cards = document.querySelectorAll('.product-card');
+        if (cards.length === 0) return;
+
+        try {
+            // ?t=${Date.now()} prevents browser caching so updates appear instantly
+            const res = await fetch(`https://api.jsonbin.io/v3/b/${CLOUD_CONFIG.BIN_ID}/latest?t=${Date.now()}`, {
+                headers: { 'X-Master-Key': CLOUD_CONFIG.READ_KEY }
+            });
+            if (!res.ok) throw new Error('Cloud fetch failed');
+
+            const { record } = await res.json();
+            const prices = record.products;
+
+            cards.forEach((card, index) => {
+                if (prices[index]) {
+                    const oldEl = card.querySelector('.price-old');
+                    const newEl = card.querySelector('.price-new');
+                    const discEl = card.querySelector('.discount-tag');
+
+                    if (oldEl) oldEl.textContent = `Rs. ${prices[index].old.toLocaleString()}`;
+                    if (newEl) newEl.textContent = `Rs. ${prices[index].new.toLocaleString()}`;
+                    if (discEl) discEl.textContent = `-${prices[index].discount}%`;
+                }
+            });
+            console.log('✅ Prices synced from cloud');
+        } catch (err) {
+            console.warn('⚠️ Cloud sync skipped:', err.message);
+        }
     }
-  });
-}
+
+    // Run sync safely after DOM is ready
+    syncPricesFromCloud();
+});
